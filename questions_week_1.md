@@ -1,4 +1,4 @@
-Answer Questions 1 and 2 using the following scenario:
+Answer Questions 1 and 2 using this scenario:
 
 The following R code generates the image below.
 ```R
