@@ -13,3 +13,36 @@ print_as_latex <- function(r_equation){
 }
 ```
 
+# Introduction
+The consumption of alcohol results in an increase in the amount of urine produced by the individual. This increases arises because alcohol inhibits the body's mechanism for regulating urine production. Normally, an individual's pituitary gland will increase the production of anti-diueretic hormone (ADH) when (s)he is dehydrated in order to slow the creation of urine, but alcohol reduces ADH production, causing one's body to create more urine than it normally would. Consuming one serving of alcohol results in approximately 120mL of excess urine. Using back of the envelope forumlas, we can approximate the effects of alcohol consumption on the level of hydration of individuals with varying weights.
+
+# Computations
+A man or woman who weighs "X"kg will urinate approximately "X"mL of urine per hour under average conditions but can urinate several times that amount depending on factors like heat and level of activity. Let's consider a 60kg man (132lbs) under normal conditions who therefore urinates 60mL per hour, or 1440mL per day. This man should consume at least 1440mL (equal to 6 cups) of water per day in order to retain a safe amount of water. This offers a baseline understanding of the logic we will apply here, and hopefully some insight into where recommendations for water consumption come from. Because an increase in activity is typical during alcohol consumption, let's add an additional 20mL of water loss per hour while drinking, due to perspiration and increased breathing rate. Now let's throw alcohol into the mix.
+
+Th consumption of beer with an alcohol content $\leq$ 4% does not usually result in significant dehydration. This is because although one can of beer (about 355mL of liquid) consumed over one hour will generate 120mL of urine above normal, the drinker intakes about 340mL of water from the beer. In one hour, the same man would intake a net 140mL of water. 
+```{r equation1, echo=FALSE, results='asis'}
+print_as_latex("-60mL -120mL -20mL + 340mL = 140mL")
+```
+If he is already hydrated, he will most likely urinate in excess of normal, but this will not contribute to his dehydration. However, other drinks such as wine and liquors with a much smaller water content than beer will cause the drinker to dehydrate quickly. The same amount of excess urine will be created (120mL per drink from alcohol), but the water intake will be significantly less than with beer.
+
+A final consideration here is the impact of the dehydration on health. Average water mass is about 60% of body weight. So the individual described above has about 36kg of water in his body, or 36000mL. If he were to lose 1500mL of water, his level of hydration would reduce to 58.6% (34kg $\div$ 58kg = .586). As little as 2% loss in hydration is enough for the brain's function to diminish, the mind to lose alertness, and for the body to fatigue. 6-10% dehydration is considered cause for immediate concern, and anything beyond that is severe and requires hospitalization and an IV. If the man above wants to rehydrate back to normal, he will have to consume approximately 3000-4500mL (12-19 cups) of water because only $\frac{1}{3}$ to $\frac{1}{2}$ of water consumed will be retained. The rest well be released as urine. 
+
+# By Weight And Drinks
+We will consider here the consumption of shots of alcohol, whose water content are so minimal that we will consider the drinker to not intake any water with each drink. 
+
+```{r loss_function, echo=TRUE}
+weights <- seq(50, 90, 5)  # Weights from 50-90kg in 5kg increments
+drinks <- c(1:12)  # 1-12 drinks possible
+hrs <- 3  # Consumed over 3 hrs
+water_loss <- function (weight) {
+  natural_water_loss <- weight * hrs
+  loss_due_to_activity <- 20 * hrs
+  loss_due_to_alcohol <- drinks * 120
+  total_loss <- natural_water_loss + loss_due_to_activity + loss_due_to_alcohol
+  return(total_loss)
+}
+loss_table <- data.frame(sapply(weights, water_loss))
+names(loss_table) <- weights
+```
+
+\* Below, I'd like to show a 3x3 plot with 9 plots - one for each weight with 'Number of Drinks (consumed in 3 hrs)' on the x-axis and 'Water Loss (mL)' on the y-axis. Then below that I'd like to show a color map with 'Weight (kg)' on the x-axis and 'Number of Drinks (consumed in 3 hrs)' on the y-axis and a grid of colors represented the dehydration each intersection of x and y coordinates. Not sure how to do this right now. *
