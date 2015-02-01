@@ -1,0 +1,15 @@
+---
+title: "The Effect of Alcohol on Hydration, by Weight"
+author: "Nikhil Haas"
+date: "January 31, 2015"
+output: pdf_document
+---
+
+```{r latex_functions, echo=FALSE}
+print_as_latex <- function(r_equation){
+  # Hides asterisks that are present in any R equations passed to this func
+  r_equation <- gsub("\\*", "", r_equation)
+  cat(paste("$$",r_equation,"$$"))
+}
+```
+
