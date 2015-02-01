@@ -44,5 +44,8 @@ water_loss <- function (weight) {
 loss_table <- data.frame(sapply(weights, water_loss))
 names(loss_table) <- weights
 ```
+```{r show_table, echo=FALSE}
+print(loss_table)
+```
 
 \* Below, I'd like to show a 3x3 plot with 9 plots - one for each weight with 'Number of Drinks (consumed in 3 hrs)' on the x-axis and 'Water Loss (mL)' on the y-axis. Then below that I'd like to show a color map with 'Weight (kg)' on the x-axis and 'Number of Drinks (consumed in 3 hrs)' on the y-axis and a grid of colors represented the dehydration each intersection of x and y coordinates. Not sure how to do this right now. *
