@@ -27,9 +27,6 @@ If he is already hydrated, he will most likely urinate in excess of normal, but 
 
 A final consideration here is the impact of the dehydration on health. Average water mass is about 60% of body weight. So the individual described above has about 36kg of water in his body, or 36000mL. If he were to lose 1500mL of water, his level of hydration would reduce to 58.6% (34kg $\div$ 58kg = .586). As little as 2% loss in hydration is enough for the brain's function to diminish, the mind to lose alertness, and for the body to fatigue. 6-10% dehydration is considered cause for immediate concern, and anything beyond that is severe and requires hospitalization and an IV. If the man above wants to rehydrate back to normal, he will have to consume approximately 3000-4500mL (12-19 cups) of water because only $\frac{1}{3}$ to $\frac{1}{2}$ of water consumed will be retained. The rest well be released as urine. 
 
-# Results
-
-
 # Method & Computation
 We will consider here the consumption of shots of alcohol, whose water content are so minimal that we will consider the drinker to not intake any water with each drink. We can then generate a matrix representing the total water loss for individuals of varying weights who consume varying numbers of drinks over a period of three hours.
 
@@ -77,7 +74,7 @@ initial_weights_matrix <- initial_weights(weights, drinks)
 final_weights_matrix <- initial_weights_matrix - loss_kg # Matrix of final weights
 ```
 Finally, we calculate the level of hydration after the water loss, which is simply the percentage of body mass that is water, compare that to the initial hydration of 60%, and visualize the data.
-```{r plot_dehydration, echo=TRUE}
+```{r plot_dehydration, echo=TRUE, eval=FALSE}
 # We now have requisite info to calculate level of hydration
 hydration_level <- water_weight_final / final_weights_matrix  # (e.g. 0.597, 0.596)
 
@@ -92,6 +89,11 @@ options(warn=-1); suppressMessages(library('fields')); options(warn=0)
 image.plot(weights, drinks, t(fii), xlab='Weight (kg)', ylab='No. of Drinks Consumed',
            main='Percent Dehydration (3hrs)')
 ```
+# Results
+```{r display_plot_dehydration, ref.label='plot_dehydration', echo=FALSE}
+```
+
+
 
 ```{r comments, echo=FALSE, eval=FALSE}
 # Another method of calculating hydration is to not to (final-initial) / initial; instead, just recalculate
