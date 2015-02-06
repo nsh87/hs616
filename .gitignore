@@ -1,0 +1,6 @@
+# Ignore R
+.Rhistory
+
+# Ignore Vim
+.swp
+.swo
