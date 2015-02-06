@@ -103,6 +103,7 @@ kable(m, row.names=1, caption='Cups of water required to rehydrate, by weight an
 ```
 
 ```{r comments, echo=FALSE, eval=FALSE}
+# TODO: Change "weight" to mass, since you use kg
 # Another method of calculating hydration is to not to (final-initial) / initial; instead, just recalculate
 #hydration_deviation <- (matrix(rep.int(rep(0.600, length(weights)), length(drinks)), nrow=length(drinks), byrow=TRUE) - hydration_level)
 
