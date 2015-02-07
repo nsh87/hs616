@@ -104,6 +104,15 @@ kable(m, row.names=1, caption='Cups of water required to rehydrate, by weight an
 
 ```{r comments, echo=FALSE, eval=FALSE}
 # TODO: Change "weight" to mass, since you use kg
+# TODO: Add citations:
+http://www.livestrong.com/article/309477-the-effects-of-alcohol-caffeine-on-dehydration/
+http://www.abc.net.au/science/articles/2012/02/28/3441707.htm
+http://www.sciencedirect.com/science/article/pii/S0741832913000037
+http://www.ncbi.nlm.nih.gov/pubmed/9338423
+http://skeptics.stackexchange.com/questions/19274/does-drinking-alcohol-dehydrate-you
+http://www.system-safety.com/articles/Dehydration.htm
+http://www.extension.iastate.edu/humansciences/fluids
+
 # Another method of calculating hydration is to not to (final-initial) / initial; instead, just recalculate
 #hydration_deviation <- (matrix(rep.int(rep(0.600, length(weights)), length(drinks)), nrow=length(drinks), byrow=TRUE) - hydration_level)
 
@@ -113,4 +122,5 @@ kable(m, row.names=1, caption='Cups of water required to rehydrate, by weight an
 # Below, I'd like to show a 3x3 plot with 9 plots - one for each weight with 'Number of Drinks (consumed in 3 hrs)' on the x-axis and 'Water Loss (mL)' on the y-axis. Then below that I'd like to show a color map with 'Weight (kg)' on the x-axis and 'Number of Drinks (consumed in 3 hrs)' on the y-axis and a grid of colors represented the dehydration each intersection of x and y coordinates. Not sure how to do this right now.
 
 # Now you need to show how much water you have to drink
+
 ```
