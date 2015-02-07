@@ -1,3 +1,4 @@
+**Week 1 (Intro to R)**  
 Answer Questions 1 and 2 using this scenario:
 
 The following R code generates the image below.
@@ -28,3 +29,20 @@ In order to plot just the the 3rd quadrant of original image, what modification 
    `y <- runif(N, min=-1.0, max=0)`
 4. `x <- runif(N, min=0, max=1.0)`  
    `y <- runif(N, min=0, max=1.0)`  
+
+_______________________
+
+**Week 2 (Statistics in R)**  
+Question 1:  
+A random sampling distribution...  
+1. allows you to infer the statistical significance of an observed outcome by comparing the observation with numerous random outcomes.    
+2. gives you a random selection of an input vector using a normal distribution.  
+3. is made using the `runif()` function in R.  
+4. is a deceptive statistical model that often incorrectly rejects the null hypothesis.  
+
+Question 2:  
+"Setting the seed", e.g. `set.seed(42)`, ...  
+1. ensures that the outcome of random number generators is repeated upon re-execution of your code.  
+2. ensures that the outcome of random number generators is *not* repeated upon re-execution of your code.  
+3. ensures that someone else who runs your code does not get the same random numbers you do.  
+4. has nothing to do with random number generation.  
