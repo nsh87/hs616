@@ -74,5 +74,10 @@ plot (hint: by plotting *y* as a function of *x*).
 3. `plot(x > y)`  
 4. `plot(y % x)`  
 
+## Lecture 4b
 
-
+What is typically the fastest way to analyze and manipulate data using R?  
+1. With vectorized functions  
+2. Using iteration  
+3. With loops  
+4. With recursion  
