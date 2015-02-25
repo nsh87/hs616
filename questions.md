@@ -32,7 +32,7 @@ would you make to the original code?
 
 ## Lecture 2a
 
-A random sampling distribution...  
+In the context of statistical analysis, a random sampling distribution...  
 1. allows you to infer the statistical significance of an observed outcome by
    comparing the observation with numerous random outcomes.    
 2. gives you a random selection of an input vector using a normal 
@@ -43,7 +43,7 @@ A random sampling distribution...
 
 ## Lecture 2b
 
-"Setting the seed", e.g. `set.seed(42)`, ...  
+"Setting the seed", e.g. `set.seed(42)`, in R...  
 1. ensures that the outcome of random number generators is repeated upon
    re-execution of your code.  
 2. ensures that the outcome of random number generators is *not* repeated upon
