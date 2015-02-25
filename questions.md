@@ -67,21 +67,21 @@ to get the dot product of *A* and *B*?
 The matrix resulting from the command `matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9),
 ncol=3)` would look like which of the following?  
 1.  
-`1  4  7`  
-`2  5  8`  
-`3  6  9`  
+  `1  4  7`  
+  `2  5  8`  
+  `3  6  9`  
 2.  
-`1  2  3`  
-`4  5  6`  
-`7  8  9`  
-3. 
-`9  8  7`  
-`6  5  4`  
-`3  2  1`  
+  `1  2  3`  
+  `4  5  6`  
+  `7  8  9`  
+3.  
+  `9  8  7`  
+  `6  5  4`  
+  `3  2  1`  
 4.  
-`9  6  3`  
-`8  5  2`  
-`7  4  1`  
+  `9  6  3`  
+  `8  5  2`  
+  `7  4  1`  
 
 ## Lecture 4a
 
