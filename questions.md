@@ -68,7 +68,7 @@ to get the dot product of *A* and *B*?
 
 To plot variables *x* and *y* along the x-axis and y-axis, respectively, one
 could use `plot(x, y)`. What is an alternative command that generates the same
-plot (hint: by plotting *y* as a function of *x*).  
+plot.  
 1. `plot(y ~ x)`  
 2. `plot(x ~ y)`  
 3. `plot(x > y)`  
