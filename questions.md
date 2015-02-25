@@ -52,3 +52,26 @@ In the context of statistical analysis, a random sampling distribution...
    numbers you do.  
 4. has nothing to do with random number generation.  
 
+## Lecture 3a
+
+There is more than one way to "multiply" vectors. In R, `A * B` will multiply
+the matrices *A* and *B* using pairwise operation. What operator would you use
+to get the dot product of *A* and *B*?  
+1. `A %*% B`   
+2. `A & B`   
+3. `A %>% B`   
+4. `A ** B`   
+
+## Lecture 3b
+
+To plot variables *x* and *y* along the x-axis and y-axis, respectively, one
+could use `plot(x, y)`. What is an alternative command that generates the same
+plot (hint: by plotting *y* as a function of *x*).  
+1. `plot(y ~ x)`  
+2. `plot(x ~ y)`  
+3. `plot(x > y)`  
+4. `plot(y % x)`  
+
+## Lecture 4a
+
+
