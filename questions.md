@@ -9,8 +9,7 @@ x <- runif(N, min=-1.0, max=1.0)
 y <- runif(N, min=-1.0, max=1.0)
 plot(x, y, pch=16, col=ifelse(x^2 + y^2 < 1, "red", "blue"))
 ```
-![Generated Plot](https://raw.githubusercontent.com/rmhorton/statprog/master/\
-week_01_teach_yourself_R/01b_literate_programming-figure/more_darts.png)
+![Generated Plot](https://raw.githubusercontent.com/rmhorton/statprog/master/week_01_teach_yourself_R/01b_literate_programming-figure/more_darts.png)
 
 How would you swap the colors in the plot?
 
