@@ -115,13 +115,21 @@ What is typically the fastest way to analyze and manipulate data using R?
 There are several data types in R: logical, integer, numeric, character, etc. 
 Sometimes when loading character data R might store the data internally as
 numbers for reference. For example, let's say you load a data frame with a
-vector `c('M', 'F', 'F', 'F', 'M', 'F')`. Internally, R might represent this
-data as `c(1, 2, 2, 2, 1, 2)`; if you checked the data type of this vector, what
-would it be?
+vector `s = c('M', 'F', 'F', 'F', 'M', 'F')`. Internally, R represents this
+data as `1, 2, 2, 2, 1, 2`, where 1='M' and 2='F'. Knowing this, if you checked
+the data type of this vector `s` in the data frame, what would it be?
 
 * factor  
 * character  
 * nominal  
 * logical
 
+## Lecture 5b
+
+The magrittr (`%>%`) is a useful tool for:
+
+* piping data into a function  
+* getting the remainder after division  
+* pulling out a column from a data frame  
+* getting the dot product of two matrices
 
