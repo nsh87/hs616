@@ -109,3 +109,19 @@ What is typically the fastest way to analyze and manipulate data using R?
 * Using iteration  
 * With loops  
 * With recursion  
+
+## Lecture 5a
+
+There are several data types in R: logical, integer, numeric, character, etc. 
+Sometimes when loading character data R might store the data internally as
+numbers for reference. For example, let's say you load a data frame with a
+vector `c('M', 'F', 'F', 'F', 'M', 'F')`. Internally, R might represent this
+data as `c(1, 2, 2, 2, 1, 2)`; if you checked the data type of this vector, what
+would it be?
+
+* factor  
+* character  
+* nominal  
+* logical
+
+
