@@ -42,6 +42,7 @@ would you make to the original code?
 ## Lecture 2a
 
 In the context of statistical analysis, a random sampling distribution...  
+
 * allows you to infer the statistical significance of an observed outcome by
    comparing the observation with numerous random outcomes.    
 * gives you a random selection of an input vector using a normal 
@@ -53,6 +54,7 @@ In the context of statistical analysis, a random sampling distribution...
 ## Lecture 2b
 
 "Setting the seed", e.g. `set.seed(42)`, in R...  
+
 * ensures that the outcome of random number generators is repeated upon
    re-execution of your code.  
 * ensures that the outcome of random number generators is *not* repeated upon
@@ -66,6 +68,7 @@ In the context of statistical analysis, a random sampling distribution...
 There is more than one way to "multiply" vectors. In R, `A * B` will multiply
 the matrices *A* and *B* using pairwise operation. What operator would you use
 to get the dot product of *A* and *B*?  
+
 * `A %*% B`   
 * `A & B`   
 * `A %>% B`   
@@ -75,18 +78,22 @@ to get the dot product of *A* and *B*?
 
 The matrix resulting from the command `matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9),
 ncol=3)` would look like which of the following?  
+
 *  
 &nbsp;&nbsp; `1  4  7`  
 &nbsp;&nbsp; `2  5  8`  
 &nbsp;&nbsp; `3  6  9`  
+
 *  
 &nbsp;&nbsp; `1  2  3`  
 &nbsp;&nbsp; `4  5  6`  
 &nbsp;&nbsp; `7  8  9`  
+
 *  
 &nbsp;&nbsp; `9  8  7`  
 &nbsp;&nbsp; `6  5  4`  
 &nbsp;&nbsp; `3  2  1`  
+
 *  
 &nbsp;&nbsp; `9  6  3`  
 &nbsp;&nbsp; `8  5  2`  
@@ -96,7 +103,8 @@ ncol=3)` would look like which of the following?
 
 To plot variables *x* and *y* along the x-axis and y-axis, respectively, one
 could use `plot(x, y)`. What is an alternative command that generates the same
-plot.  
+plot?  
+
 * `plot(y ~ x)`  
 * `plot(x ~ y)`  
 * `plot(x > y)`  
@@ -105,6 +113,7 @@ plot.
 ## Lecture 4b
 
 What is typically the fastest way to analyze and manipulate data using R?  
+
 * With vectorized functions  
 * Using iteration  
 * With loops  
