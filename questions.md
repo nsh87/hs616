@@ -8,7 +8,6 @@ y <- runif(N, min=-*0, max=*0)
 plot(x, y, pch=16, col=ifelse(x^2 + y^2 < 1, "red", "blue"))
 ```
 ![Generated Plot](https://raw.githubusercontent.com/rmhorton/statprog/master/week_01_teach_yourself_R/01b_literate_programming-figure/more_darts.png)
-
 How would you swap the colors in the plot?
 
 * `plot(x, y, pch=16, col=ifelse(x^2 + y^2 < 1, "blue", "red"))`
@@ -26,7 +25,6 @@ y <- runif(N, min=-*0, max=*0)
 plot(x, y, pch=16, col=ifelse(x^2 + y^2 < 1, "red", "blue"))
 ```
 ![Generated Plot](https://raw.githubusercontent.com/rmhorton/statprog/master/week_01_teach_yourself_R/01b_literate_programming-figure/more_darts.png)
-
 In order to plot just the the 3rd quadrant of the image, what modification
 would you make to the original code?
 
@@ -142,3 +140,6 @@ The magrittr (`%>%`) is a useful tool for:
 * pulling out a column from a data frame  
 * getting the dot product of two matrices
 
+## Lecture 6a
+
+What is unique abou
