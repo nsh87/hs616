@@ -1,0 +1,11 @@
+name;email;github_questions
+Bob Horton;rmhorton@usfca.edu;rmhorton/hs616/blob/master/questions.md
+Christopher Atterbury;cbatterbury@usfca.edu;catterbu/hs616/blob/master/questions.Rmd
+Chaman Preet Kaur;ckaur3@usfca.edu;cpkaur/hs616/blob/master/Quiz_questions.Rmd
+Vaishali;vchaudhuri@usfca.edu;vchaudhuri/hs-616/blob/master/MCQ_Week_1.Rmd
+Thomas A De Natale;tadenatale@usfca.edu;tdenatale/hs616/blob/master/Homework %20question%20day%201.Rmd
+John Greer;jegreer@usfca.edu;johnedwardgreer/hs616/blob/master/Question-Per-Lecture
+Nikhil Haas;nshaas@usfca.edu;nsh87/hs616/blob/master/questions.md
+Lakshmi;lnavinarbatti@usfca.edu;lakarbatti/hs-616/blob/master/Course%20Questions %20Week-wise.Rmd
+Lydia (Xiangyi Xu);xxu26@usfca.edu;xxu26/hs616/blob/master/LectureQuestions.md
+Sneha Krishna;skrishna@dons.usfca.edu;sneha-krishna/hs616/blob/working-doc/lecturequestions.txt
