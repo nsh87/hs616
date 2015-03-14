@@ -78,17 +78,17 @@ The matrix resulting from the command `matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9),
 ncol=3)` would look like which of the following?  
 
 * &nbsp;&nbsp; `1  4  7`  
-&nbsp;&nbsp;&nbsp; `2  5  8`  
-&nbsp;&nbsp;&nbsp; `3  6  9`  
+&nbsp;&nbsp; `2  5  8`  
+&nbsp;&nbsp; `3  6  9`  
 * &nbsp;&nbsp; `1  2  3`  
-&nbsp;&nbsp;&nbsp; `4  5  6`  
-&nbsp;&nbsp;&nbsp; `7  8  9`  
+&nbsp;&nbsp; `4  5  6`  
+&nbsp;&nbsp; `7  8  9`  
 * &nbsp;&nbsp; `9  8  7`  
-&nbsp;&nbsp;&nbsp; `6  5  4`  
-&nbsp;&nbsp;&nbsp; `3  2  1`  
+&nbsp;&nbsp; `6  5  4`  
+&nbsp;&nbsp; `3  2  1`  
 * &nbsp;&nbsp; `9  6  3`  
-&nbsp;&nbsp;&nbsp; `8  5  2`  
-&nbsp;&nbsp;&nbsp; `7  4  1` 
+&nbsp;&nbsp; `8  5  2`  
+&nbsp;&nbsp; `7  4  1` 
 
 ## Lecture 4a
 
