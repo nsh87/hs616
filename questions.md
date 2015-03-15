@@ -80,12 +80,15 @@ ncol=3)` would look like which of the following?
 * &nbsp;&nbsp; `1  4  7`  
 &nbsp;&nbsp; `2  5  8`  
 &nbsp;&nbsp; `3  6  9`  
+&nbsp;  
 * &nbsp;&nbsp; `1  2  3`  
 &nbsp;&nbsp; `4  5  6`  
 &nbsp;&nbsp; `7  8  9`  
+&nbsp;  
 * &nbsp;&nbsp; `9  8  7`  
 &nbsp;&nbsp; `6  5  4`  
 &nbsp;&nbsp; `3  2  1`  
+&nbsp;  
 * &nbsp;&nbsp; `9  6  3`  
 &nbsp;&nbsp; `8  5  2`  
 &nbsp;&nbsp; `7  4  1` 
@@ -135,4 +138,35 @@ The magrittr (`%>%`) is a useful tool for:
 
 ## Lecture 6a
 
-What is unique abou
+When working with databases through R on your local computer, what is the
+advantage of working with SQLite instead of MySQL?
+
+* SQLite doesn't require you to create an database, whereas MySQL does.
+* There isn't an advantage because there is no way to connect to a SQLite
+database in R.
+* SQLite is also suitable for a multi-user environment where many users connect
+to the database simultaneously.
+* There are no packages to connect to a MySQL database in R.
+
+## Lecture 6b
+
+## Lecture 7a
+
+Which matrix is most dense?
+
+* &nbsp;&nbsp; `0  5  0  0  9  0  0 `    
+&nbsp;&nbsp; `0  0  1  0  0  0  0`     
+&nbsp;&nbsp; `0  0  0  0  8  0  0`   
+&nbsp;
+* &nbsp;&nbsp; `9  7`  
+&nbsp;&nbsp; `9  5`  
+&nbsp;
+* &nbsp;&nbsp; `0  8  7`  
+&nbsp;&nbsp; `2  5  12`  
+&nbsp;&nbsp; `0  2  1`  
+&nbsp;
+* &nbsp;&nbsp; `1  0  0`  
+&nbsp;&nbsp; `0  1  0`  
+&nbsp;&nbsp; `0  0  1`
+
+## Lecture 7b
