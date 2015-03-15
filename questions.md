@@ -156,18 +156,36 @@ connect to the database simultaneously.
 
 ## Lecture 6b
 
+Consider the following table:
+```
+| id|name |sex |  
+|---|-----|----|  
+|  1|Alt  |F   |  
+|  2|Box  |M   |  
+|  3|Cox  |M   |  
+|  4|Dew  |F   |  
+|  5|Ely  |F   |  
+```
+What would be the correct SQL query to get all females in this table?
 
+* `SELECT * FROM patient WHERE sex='F'`  
+&nbsp;  
+* `SELECT 'F' from COLUMN 'sex'`  
+&nbsp;  
+* `SELECT sex='f' from patient`  
+&nbsp;  
+* `SELECT sex='f' from patient where COLUMN='name'`
 
 ## Lecture 7a
 
 Which matrix is most dense?
 
+* &nbsp;&nbsp; `9  7`  
+&nbsp;&nbsp; `9  5`  
+&nbsp;
 * &nbsp;&nbsp; `0  5  0  0  9  0  0 `    
 &nbsp;&nbsp; `0  0  1  0  0  0  0`     
 &nbsp;&nbsp; `0  0  0  0  8  0  0`   
-&nbsp;
-* &nbsp;&nbsp; `9  7`  
-&nbsp;&nbsp; `9  5`  
 &nbsp;
 * &nbsp;&nbsp; `0  8  7`  
 &nbsp;&nbsp; `2  5  12`  
