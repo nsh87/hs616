@@ -147,14 +147,16 @@ The magrittr (`%>%`) is a useful tool for:
 When working with databases through R on your local computer, what is the
 advantage of working with SQLite instead of MySQL?
 
-* SQLite doesn't require you to create an database, whereas MySQL does.
+* SQLite uses a flat file, as opposed to requiring a database connection.
 * There isn't an advantage because there is no way to connect to a SQLite
 database in R.
-* SQLite is also suitable for a multi-user environment where many users connect
-to the database simultaneously.
+* SQLite is also suitable for a multi-user environment where hundreds of users
+connect to the database simultaneously.
 * There are no packages to connect to a MySQL database in R.
 
 ## Lecture 6b
+
+
 
 ## Lecture 7a
 
@@ -192,4 +194,3 @@ Do not store a single observational unit in a single table.
 * Multiple variables are stored in one column.  
 Each observation forms a row.  
 Column headers are values, not variable names.
-
