@@ -10,9 +10,12 @@ plot(x, y, pch=16, col=ifelse(x^2 + y^2 < 1, "red", "blue"))
 ![Generated Plot](https://raw.githubusercontent.com/rmhorton/statprog/master/week_01_teach_yourself_R/01b_literate_programming-figure/more_darts.png)  
 How would you swap the colors in the plot?
 
-* `plot(x, y, pch=16, col=ifelse(x^2 + y^2 < 1, "blue", "red"))`
-* `plot(x, y, pch=16, col=ifelse(x^2 + y^2 > 1, "red", "blue"))`
-* `plot(y, x, pch=16, col=ifelse(x^2 + y^2 > 1, "red", "blue"))`
+* `plot(x, y, pch=16, col=ifelse(x^2 + y^2 < 1, "blue", "red"))`  
+&nbsp;
+* `plot(x, y, pch=16, col=ifelse(x^2 + y^2 > 1, "red", "blue"))`  
+&nbsp;
+* `plot(y, x, pch=16, col=ifelse(x^2 + y^2 > 1, "red", "blue"))`  
+&nbsp;
 * `plot(x, y, pch=16, col=ifelse(x^2 - x^2 < 1, "red", "blue"))`
 
 ## Lecture 1b
@@ -29,11 +32,14 @@ In order to plot just the the 3rd quadrant of the image, what modification
 would you make to the original code?
 
 * `x <- runif(N, min=-0.5, max=0)`  
-   `y <- runif(N, min=-0.5, max=0)`
+   `y <- runif(N, min=-0.5, max=0)`  
+&nbsp;
 * `x <- runif(N, min=0, max=*0)`  
-   `y <- runif(N, min=-*0, max=0)` 
+   `y <- runif(N, min=-*0, max=0)`  
+&nbsp;
 * `x <- runif(N, min=-*0, max=0)`  
-   `y <- runif(N, min=-*0, max=0)`
+   `y <- runif(N, min=-*0, max=0)`  
+&nbsp;
 * `x <- runif(N, min=0, max=*0)`  
    `y <- runif(N, min=0, max=*0)`  
 
@@ -170,3 +176,20 @@ Which matrix is most dense?
 &nbsp;&nbsp; `0  0  1`
 
 ## Lecture 7b
+
+Which characteristics describe *tidy data*?
+
+* Each variable forms a column.  
+Each observation forms a row.  
+Each type of observational unit forms a table.  
+&nbsp;
+* Column headers are values, not variable names.  
+Variables are stored in both rows and columns.  
+&nbsp;
+* As many observational units as possible are stored in the same table.  
+Do not store a single observational unit in a single table.  
+&nbsp;
+* Multiple variables are stored in one column.  
+Each observation forms a row.  
+Column headers are values, not variable names.
+
