@@ -3,8 +3,8 @@
 The following R code generates the image below.
 ```R
 N <- 100000
-x <- runif(N, min=-*0, max=*0)
-y <- runif(N, min=-*0, max=*0)
+x <- runif(N, min=-1, max=1)
+y <- runif(N, min=-1, max=1)
 plot(x, y, pch=16, col=ifelse(x^2 + y^2 < 1, "red", "blue"))
 ```
 ![Generated Plot](https://raw.githubusercontent.com/rmhorton/statprog/master/week_01_teach_yourself_R/01b_literate_programming-figure/more_darts.png)  
@@ -23,8 +23,8 @@ How would you swap the colors in the plot?
 The following R code generates the image below.
 ```R
 N <- 100000
-x <- runif(N, min=-*0, max=*0)
-y <- runif(N, min=-*0, max=*0)
+x <- runif(N, min=-1, max=1)
+y <- runif(N, min=-1, max=1)
 plot(x, y, pch=16, col=ifelse(x^2 + y^2 < 1, "red", "blue"))
 ```
 ![Generated Plot](https://raw.githubusercontent.com/rmhorton/statprog/master/week_01_teach_yourself_R/01b_literate_programming-figure/more_darts.png)  
@@ -70,8 +70,8 @@ In the context of statistical analysis, a random sampling distribution...
 ## Lecture 3a
 
 There is more than one way to "multiply" vectors. In R, `A * B` will multiply
-the matrices *A* and *B* using pairwise operation. What operator would you use
-to get the dot product of *A* and *B*?  
+the matrices *A* and *B* using pairwise operation. How would you get the dot
+product of *A* and *B*?  
 
 * `A %*% B`   
 * `A & B`   
