@@ -43,8 +43,8 @@ generateDataSet <- function(N=38728) {
   numRegisteredNurses <- c(weekday=1:20, weekend=1:9)
   
   numPatientsCaredFor <- c(1:28)
-  numPatientsCaredForMean <- c(weekday=10.1, weekend=6.3)
-  numPatientsCaredForSTD <- c(weekday=2.4, weekend=3.4)
+  numPatientsCaredForMean <- c(weekday=10.1, weekend=4.3)
+  numPatientsCaredForSTD <- c(weekday=2.4, weekend=1.4)
   
   numTasksUndone <- c(0:7)
   numTasksUndoneMean <- c(weekday=0.9, weekend=2.1)
@@ -57,19 +57,26 @@ generateDataSet <- function(N=38728) {
   
   ## Sample Distributions ##
   
-  # Create a list of dates:
-  # |    date    |  weekday | day |
-  # | 1998/03/08 |  Sunday  |  0  |
-  # | 1998/03/09 |  Monday  |  1  |
+  # Create a list of possible dates to sample from:
+  # |    date    |  weekday | day |  type   |
+  # | 1998/03/08 |  Sunday  |  0  | weekend |         
+  # | 1998/03/09 |  Monday  |  1  | weekday |
   #                .
   #                .
   #                .
   dates <- data.frame(date=seq.Date(startDate, endDate, by='day'))
   dates$weekday <- weekdays(as.Date(dates$date))
   dates$day <- as.POSIXlt(dates$date)$wday
+  type <- c(Sunday='weekend',
+            Monday='weekday',
+            Tuesday='weekday',
+            Wednesday='weekday',
+            Thursday='weekday',
+            Friday='weekday',
+            Saturday='weekend')
+  dates$type <- type[dates$weekday]
   
-  
-
+    
 }
 
 
