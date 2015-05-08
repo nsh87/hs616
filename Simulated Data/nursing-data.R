@@ -40,10 +40,11 @@ generateDataSet <- function(N=38728) {
   
   qualOfCare <- c("Poor", "Fair", "Good", "Excellent")
   
-  numRegisteredNurses <- c(weekday=1:20, weekend=1:9)
+  numWeekdayNurses <- c(2:20)
+  numWeekendNurses <- c(1:9)
   
   numPatientsCaredFor <- c(1:28)
-  numPatientsCaredForMean <- c(weekday=10.1, weekend=4.3)
+  numPatientsCaredForMean <- c(weekday=10.1, weekend=11.3)
   numPatientsCaredForSTD <- c(weekday=2.4, weekend=1.4)
   
   numTasksUndone <- c(0:7)
@@ -76,7 +77,18 @@ generateDataSet <- function(N=38728) {
             Saturday='weekend')
   dates$type <- type[dates$weekday]
   
-    
+  # Sample number of nurses worked per day on weekdays
+  dates$numNurses <- NA
+  dates$numNurses[dates$type == 'weekday'] <- sample(x=numWeekdayNurses,
+                                                    size=length(dates$numNurses[dates$type == 'weekday']),
+                                                    replace=TRUE)
+  # And on weekends
+  dates$numNurses[dates$type == 'weekend'] <- sample(x=numWeekendNurses,
+                                                     size=length(dates$numNurses[dates$type == 'weekend']),
+                                                     replace=TRUE)
+  print(mean(dates$numNurses))
+  print(mean(dates$numNurses[dates$type == 'weekday']))
+  print(mean(dates$numNurses[dates$type == 'weekend']))
 }
 
 
