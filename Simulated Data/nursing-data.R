@@ -32,23 +32,44 @@
 # Feature 7 - Number of patient safety problems: 0 - 4
 # Feature 5 - Date: YYYY/MM/DD
 
-##### Set Parameters #####
+##### Create Data Set #####
 
-qualOfCare <- c("Poor", "Fair", "Good", "Excellent")
+generateDataSet <- function(N=38728) {
+  
+  ## Set Constraints ##
+  
+  qualOfCare <- c("Poor", "Fair", "Good", "Excellent")
+  
+  numRegisteredNurses <- c(weekday=1:20, weekend=1:9)
+  
+  numPatientsCaredFor <- c(1:28)
+  numPatientsCaredForMean <- c(weekday=10.1, weekend=6.3)
+  numPatientsCaredForSTD <- c(weekday=2.4, weekend=3.4)
+  
+  numTasksUndone <- c(0:7)
+  numTasksUndoneMean <- c(weekday=0.9, weekend=2.1)
+  
+  numSafetyProbs <- c(0:4)
+  numSafetyProbsMean <- c(weekday=0.4, weekend=1.1)
+  
+  startDate <- as.Date("1998/03/08")
+  endDate <- as.Date("2007/12/01")
+  
+  ## Sample Distributions ##
+  
+  # Create a list of dates:
+  # |    date    |  weekday | day |
+  # | 1998/03/08 |  Sunday  |  0  |
+  # | 1998/03/09 |  Monday  |  1  |
+  #                .
+  #                .
+  #                .
+  dates <- data.frame(date=seq.Date(startDate, endDate, by='day'))
+  dates$weekday <- weekdays(as.Date(dates$date))
+  dates$day <- as.POSIXlt(dates$date)$wday
+  
+  
 
-numRegisteredNurses <- c(weekday=1:9, weekend=1:20)
-
-numPatientsCaredFor <- c(1:28)
-numPatientsCaredForMean <- c(weekday=10.1, weekend=6.3)
-numPatientsCaredForSTD <- c(weekday=2.4, weekend=3.4)
-
-numTasksUndone <- c(0:7)
-numTasksUndoneMean <- c(weekday=0.9, weekend=2.1)
-
-numSafetyProbs <- c(0:4)
-numSafetyProbsMean <- c(weekday=0.4, weekend=1.1)
-
-startDate <- "1998/03/08"
-endDate <- "2007/12/01"
+}
 
 
