@@ -38,13 +38,15 @@ generateDataSet <- function() {
   
   ## Set Constraints ##
   qualOfCare <- c("Poor", "Fair", "Good", "Excellent")
+  qualOfCareMean <- c(weekday=3.3, weekend=1.8)
+  qualOfCareSTD <- c(weekday=1.8, weekend=0.9)
   
   numWeekdayNurses <- c(3:20)
   numWeekendNurses <- c(1:9)
   
   numPatientsCaredFor <- c(1:28)
-  numPatientsCaredForMean <- c(weekday=10.1, weekend=11.3)
-  numPatientsCaredForSTD <- c(weekday=2.4, weekend=1.4)
+  numPatientsCaredForMean <- c(weekday=6.3, weekend=11.3)
+  numPatientsCaredForSTD <- c(weekday=3.4, weekend=1.4)
   
   numTasksUndone <- c(0:7)
   numTasksUndoneMean <- c(weekday=0.9, weekend=2.1)
@@ -85,7 +87,6 @@ generateDataSet <- function() {
           max=max(numWeekdayNurses)),
     digits=0
   )
-    
   # And on weekends
   dates$numNurses[dates$type == 'weekend'] <- round(
     runif(n=length(dates$numNurses[dates$type == 'weekend']),
@@ -99,6 +100,40 @@ generateDataSet <- function() {
   # print(mean(dates$numNurses[dates$type == 'weekend']))
   ## End Dates Creation ##
   
+  
+  ## Create data frame of entries based on daily values ##
+  # Expands each day in the dates data frame N times, where N is
+  # dates$numNurses, so for each day you have an entry for every nurse working
+  # that day.
+  dataSet <- data.frame(dates[rep(c(1:nrow(dates)), dates$numNurses), c(1, 4)],
+                        row.names=NULL
+  )
+  # Above, c(1, 4) tells to take columns 1 and 4 from the 'dates' data frame.
+  names(dataSet) <- c('date', 'type')
+  
+  # Set quality rating for weekend and weekday
+  dataSet$qualOfCare = NA
+  # Weekdays
+  weekdayRows <- dataSet$qualOfCare[dataSet$type == 'weekday']
+  qualRatingWeekday <- sample(x=c(1:4),
+                              size=length(weekdayRows),
+                              replace=TRUE,
+                              prob=c(.02, .04, .30, .64)
+  )
+  # mean(qualRatingWeekday)
+  # sd(qualRatingWeekday)
+  # hist(qualRatingWeekday)
+  dataSet$qualOfCare[dataSet$type == 'weekday'] <- qualRatingWeekday
+  # Weekend
+  weekendRows <- dataSet$qualOfCare[dataSet$type == 'weekend']
+  qualRatingWeekend <- sample(x=c(1:4),
+                              size=length(weekendRows),
+                              replace=TRUE,
+                              prob=c(.4, .33, .21, .06))
+  # mean(qualRatingWeekend)
+  # sd(qualRatingWeekend)
+  # hist(qualRatingWeekend)
+  dataSet$qualOfCare[dataSet$type == 'weekend'] <- qualRatingWeekend
   
   
   
