@@ -34,13 +34,12 @@
 
 ##### Create Data Set #####
 
-generateDataSet <- function(N=38728) {
+generateDataSet <- function() {
   
   ## Set Constraints ##
-  
   qualOfCare <- c("Poor", "Fair", "Good", "Excellent")
   
-  numWeekdayNurses <- c(2:20)
+  numWeekdayNurses <- c(3:20)
   numWeekendNurses <- c(1:9)
   
   numPatientsCaredFor <- c(1:28)
@@ -55,9 +54,10 @@ generateDataSet <- function(N=38728) {
   
   startDate <- as.Date("1998/03/08")
   endDate <- as.Date("2007/12/01")
+  ## End Constraints ##
   
-  ## Sample Distributions ##
   
+  ## Create Dates and Distribution of Number of Nurses per Day ##
   # Create a list of possible dates to sample from:
   # |    date    |  weekday | day |  type   |
   # | 1998/03/08 |  Sunday  |  0  | weekend |         
@@ -79,16 +79,29 @@ generateDataSet <- function(N=38728) {
   
   # Sample number of nurses worked per day on weekdays
   dates$numNurses <- NA
-  dates$numNurses[dates$type == 'weekday'] <- sample(x=numWeekdayNurses,
-                                                    size=length(dates$numNurses[dates$type == 'weekday']),
-                                                    replace=TRUE)
+  dates$numNurses[dates$type == 'weekday'] <- round(
+    runif(n=length(dates$numNurses[dates$type == 'weekday']),
+          min=min(numWeekdayNurses),
+          max=max(numWeekdayNurses)),
+    digits=0
+  )
+    
   # And on weekends
-  dates$numNurses[dates$type == 'weekend'] <- sample(x=numWeekendNurses,
-                                                     size=length(dates$numNurses[dates$type == 'weekend']),
-                                                     replace=TRUE)
-  print(mean(dates$numNurses))
-  print(mean(dates$numNurses[dates$type == 'weekday']))
-  print(mean(dates$numNurses[dates$type == 'weekend']))
+  dates$numNurses[dates$type == 'weekend'] <- round(
+    runif(n=length(dates$numNurses[dates$type == 'weekend']),
+          min=min(numWeekendNurses),
+          max=max(numWeekendNurses)),
+    digits=0
+  )
+  
+  # print(mean(dates$numNurses))
+  # print(mean(dates$numNurses[dates$type == 'weekday']))
+  # print(mean(dates$numNurses[dates$type == 'weekend']))
+  ## End Dates Creation ##
+  
+  
+  
+  
 }
 
 
