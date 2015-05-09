@@ -136,6 +136,29 @@ generateDataSet <- function() {
   dataSet$qualOfCare[dataSet$type == 'weekend'] <- qualRatingWeekend
   
   
+  ## Set linear relationship between quality of care and other stuff
+  dataSet$numPatientsCaredFor <- NA
+  dataSet$numPatientsCaredFor[dataSet$type == 'weekday'] <- vapply(dataSet$qualOfCare[dataSet$type == 'weekday'], FUN.VALUE=integer(1), FUN=function(qual){
+    round((-1.76*qual + sample(c(-2:2, by=.1), size=1) + 10), digits=0)
+  })
+  dataSet$numPatientsCaredFor[dataSet$type == 'weekend'] <- vapply(dataSet$qualOfCare[dataSet$type == 'weekend'], FUN.VALUE=integer(1), FUN=function(qual){
+    round((-1.76*qual + sample(c(-2:2, by=.1), size=1) + 20), digits=0)
+  })
+  # dataSet$numPatientsCaredFor <- 1.76*(dataSet$qualOfCare) + sample(c(-4:4, by=.1), size=1) + 10
+  mean(dataSet$numPatientsCaredFor[dataSet$type == 'weekend'])
+  mean(dataSet$numPatientsCaredFor[dataSet$type == 'weekday'])
+  min(dataSet$numPatientsCaredFor)
+  max(dataSet$numPatientsCaredFor)
+  
+  ## Add number of staffed nurses that day for verification
+  dataSet$numStaffedNursesDailyTotal <- NA
+  dataSet$numStaffedNursesDailyTotal <- sapply(dataSet$date, FUN=function(d){
+    length(dataSet$date[dataSet$date == d])
+  })
+  mean(dataSet$numStaffedNursesDailyTotal[dataSet$type == 'weekend'])
+  mean(dataSet$numStaffedNursesDailyTotal[dataSet$type == 'weekday'])
+  min(dataSet$numStaffedNursesDailyTotal)
+  max(dataSet$numStaffedNursesDailyTotal)
   
 }
 
