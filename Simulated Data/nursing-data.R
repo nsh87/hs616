@@ -41,8 +41,8 @@ generateDataSet <- function() {
   qualOfCareMean <- c(weekday=3.3, weekend=1.8)
   qualOfCareSTD <- c(weekday=1.8, weekend=0.9)
   
-  numWeekdayNurses <- c(3:20)
-  numWeekendNurses <- c(1:9)
+  numWeekdayNurses <- c(mean=11, std=1.2)
+  numWeekendNurses <- c(mean=6, std=1)
   
   numPatientsCaredFor <- c(1:28)
   numPatientsCaredForMean <- c(weekday=6.3, weekend=11.3)
@@ -82,16 +82,16 @@ generateDataSet <- function() {
   # Sample number of nurses worked per day on weekdays
   dates$numNurses <- NA
   dates$numNurses[dates$type == 'weekday'] <- round(
-    runif(n=length(dates$numNurses[dates$type == 'weekday']),
-          min=min(numWeekdayNurses),
-          max=max(numWeekdayNurses)),
+    rnorm(n=length(dates$numNurses[dates$type == 'weekday']),
+          mean=numWeekdayNurses['mean'],
+          sd=numWeekdayNurses['std']),
     digits=0
   )
   # And on weekends
   dates$numNurses[dates$type == 'weekend'] <- round(
-    runif(n=length(dates$numNurses[dates$type == 'weekend']),
-          min=min(numWeekendNurses),
-          max=max(numWeekendNurses)),
+    rnorm(n=length(dates$numNurses[dates$type == 'weekend']),
+          mean=numWeekendNurses['mean'],
+          sd=numWeekendNurses['std']),
     digits=0
   )
   
@@ -138,10 +138,10 @@ generateDataSet <- function() {
   
   ## Set linear relationship between quality of care and other stuff
   dataSet$numPatientsCaredFor <- NA
-  dataSet$numPatientsCaredFor[dataSet$type == 'weekday'] <- vapply(dataSet$qualOfCare[dataSet$type == 'weekday'], FUN.VALUE=integer(1), FUN=function(qual){
+  dataSet$numPatientsCaredFor[dataSet$type == 'weekday'] <- vapply(dataSet$qualOfCare[dataSet$type == 'weekday'], FUN.VALUE=double(1), FUN=function(qual){
     round((-1.76*qual + sample(c(-2:2, by=.1), size=1) + 10), digits=0)
   })
-  dataSet$numPatientsCaredFor[dataSet$type == 'weekend'] <- vapply(dataSet$qualOfCare[dataSet$type == 'weekend'], FUN.VALUE=integer(1), FUN=function(qual){
+  dataSet$numPatientsCaredFor[dataSet$type == 'weekend'] <- vapply(dataSet$qualOfCare[dataSet$type == 'weekend'], FUN.VALUE=double(1), FUN=function(qual){
     round((-1.76*qual + sample(c(-2:2, by=.1), size=1) + 20), digits=0)
   })
   # dataSet$numPatientsCaredFor <- 1.76*(dataSet$qualOfCare) + sample(c(-4:4, by=.1), size=1) + 10
@@ -152,7 +152,7 @@ generateDataSet <- function() {
   
   ## Add number of staffed nurses that day for verification
   dataSet$numStaffedNursesDailyTotal <- NA
-  dataSet$numStaffedNursesDailyTotal <- sapply(dataSet$date, FUN=function(d){
+  dataSet$numStaffedNursesDailyTotal <- vapply(dataSet$date, FUN.VALUE=double(1), FUN=function(d){
     length(dataSet$date[dataSet$date == d])
   })
   mean(dataSet$numStaffedNursesDailyTotal[dataSet$type == 'weekend'])
