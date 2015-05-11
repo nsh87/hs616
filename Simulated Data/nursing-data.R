@@ -122,10 +122,10 @@ generateDataSet <- function() {
     # Repeate each row "number_of_times=numNurses", taking columns 1 & 3, and
     # setting row.names to NULL:
     dataSet <- data.frame(eachDay[rep(c(1:nrow(eachDay)), eachDay$numNurses),
-                                  c(1, 3)],
+                                  c(1, 3, 4)],
                           row.names=NULL)
     # Set column headers of the expanded data frame
-    names(dataSet) <- c('date', 'typeOfDay')
+    names(dataSet) <- c('date', 'typeOfDay', 'numDailyStaffedNurses')
     dataSet
   }
   dataSet <- expandRows()
@@ -139,7 +139,7 @@ generateDataSet <- function() {
     
     dataSet$qualOfCare = NA
     for (w in c('weekday', 'weekend')) {
-      rowsOfType <- dataSet$qualOfCare[dataSet$typeOfDay == w]
+      rowsOfType <- dataSet$typeOfDay[dataSet$typeOfDay == w]
       qualRating <- sample(x=c(1:length(qualOfCareOptions)),
                            size=length(rowsOfType),
                            prob=as.numeric(unlist(qualOfCareProb[w])),
@@ -165,24 +165,33 @@ generateDataSet <- function() {
     # will exist no matter which variable we have depend on which, so it is up
     # to the analyst to interpret the direction of the relationship.
     
-    dataSet$numPatientsCaredFor <- NA
-    
-    
-    
+    linRelate <- function(x) {
+      # The linear relationship to be applied to qualOfCare
+      -1.78*x + 9 + rpois(1, lambda=2)
+      # Adds some variability using Poisson distribution. With lambda=2, the
+      # distribution should have mode=1, min=0, max=8, mean=2. The idea is that
+      # on a given day a hospital could get overloaded, but the likelihood of
+      # getting overloaded by N patients decreases as N increases.
+      # Visualize: http://www.umass.edu/wsp/resources/poisson/
+    }
+
+    dataSet$patientWorkload <- NA
+    for (w in c('weekday', 'weekend')) {
+      rowsOfType <- dataSet$qualOfCare[dataSet$typeOfDay == w]
+      dataSet$patientWorkload[dataSet$typeOfDay == w] <- vapply(
+        rowsOfType,
+        FUN=linRelate,
+        FUN.VALUE=double(1)
+      )
+    }
+    # Set the Patient Workload as an integer instead of a decimal value
+    dataSet$patientWorkload <- as.integer(
+      round(dataSet$patientWorkload, digits=0)
+    )
+    dataSet
   }
-    ## Set linear relationship between quality of care and other stuff
-    dataSet$numPatientsCaredFor[dataSet$type == 'weekday'] <- vapply(dataSet$qualOfCare[dataSet$type == 'weekday'], FUN.VALUE=double(1), FUN=function(qual){
-      round((-1.76*qual + sample(c(-2:2, by=.1), size=1) + 10), digits=0)
-    })
-    dataSet$numPatientsCaredFor[dataSet$type == 'weekend'] <- vapply(dataSet$qualOfCare[dataSet$type == 'weekend'], FUN.VALUE=double(1), FUN=function(qual){
-      round((-1.76*qual + sample(c(-2:2, by=.1), size=1) + 10), digits=0)
-    })
-    # dataSet$numPatientsCaredFor <- 1.76*(dataSet$qualOfCare) + sample(c(-4:4, by=.1), size=1) + 10
-    mean(dataSet$numPatientsCaredFor[dataSet$type == 'weekday'])
-    mean(dataSet$numPatientsCaredFor[dataSet$type == 'weekend'])
-    min(dataSet$numPatientsCaredFor)
-    max(dataSet$numPatientsCaredFor)
-    
+  dataSet <- relateQualOfCareToNumPatients()
+
     ## Add number of staffed nurses that day for verification
     dataSet$numStaffedNursesDailyTotal <- NA
     dataSet$numStaffedNursesDailyTotal <- vapply(dataSet$date, FUN.VALUE=double(1), FUN=function(d){
