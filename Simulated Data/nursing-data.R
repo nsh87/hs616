@@ -142,11 +142,11 @@ generateDataSet <- function() {
     round((-1.76*qual + sample(c(-2:2, by=.1), size=1) + 10), digits=0)
   })
   dataSet$numPatientsCaredFor[dataSet$type == 'weekend'] <- vapply(dataSet$qualOfCare[dataSet$type == 'weekend'], FUN.VALUE=double(1), FUN=function(qual){
-    round((-1.76*qual + sample(c(-2:2, by=.1), size=1) + 20), digits=0)
+    round((-1.76*qual + sample(c(-2:2, by=.1), size=1) + 10), digits=0)
   })
   # dataSet$numPatientsCaredFor <- 1.76*(dataSet$qualOfCare) + sample(c(-4:4, by=.1), size=1) + 10
-  mean(dataSet$numPatientsCaredFor[dataSet$type == 'weekend'])
   mean(dataSet$numPatientsCaredFor[dataSet$type == 'weekday'])
+  mean(dataSet$numPatientsCaredFor[dataSet$type == 'weekend'])
   min(dataSet$numPatientsCaredFor)
   max(dataSet$numPatientsCaredFor)
   
@@ -155,8 +155,8 @@ generateDataSet <- function() {
   dataSet$numStaffedNursesDailyTotal <- vapply(dataSet$date, FUN.VALUE=double(1), FUN=function(d){
     length(dataSet$date[dataSet$date == d])
   })
-  mean(dataSet$numStaffedNursesDailyTotal[dataSet$type == 'weekend'])
   mean(dataSet$numStaffedNursesDailyTotal[dataSet$type == 'weekday'])
+  mean(dataSet$numStaffedNursesDailyTotal[dataSet$type == 'weekend'])
   min(dataSet$numStaffedNursesDailyTotal)
   max(dataSet$numStaffedNursesDailyTotal)
   
