@@ -34,7 +34,7 @@
 
 ##### Create Data Set #####
 
-generateDataSet <- function() {
+generateDataSet <- function(startDate="1998/03/08", endDate="2007/12/01") {
   
   ## Set Constraints ##
   qualOfCare <- c("Poor", "Fair", "Good", "Excellent")
@@ -47,31 +47,37 @@ generateDataSet <- function() {
   
   numSafetyProbs <- c(0:4)
   numSafetyProbsMean <- c(weekday=0.4, weekend=1.1)
-  
-  startDate <- as.Date("1998/03/08")
-  endDate <- as.Date("2007/12/01")
   ## End Constraints ##
   
-  
-  ## Create Dates and Distribution of Number of Nurses per Day ##
-  # Create a list of possible dates to sample from:
-  # |    date    |  weekday | day |  type   |
-  # | 1998/03/08 |  Sunday  |  0  | weekend |         
-  # | 1998/03/09 |  Monday  |  1  | weekday |
-  #                .
-  #                .
-  #                .
-  dates <- data.frame(date=seq.Date(startDate, endDate, by='day'))
-  dates$weekday <- weekdays(as.Date(dates$date))
-  dates$day <- as.POSIXlt(dates$date)$wday
-  type <- c(Sunday='weekend',
-            Monday='weekday',
-            Tuesday='weekday',
-            Wednesday='weekday',
-            Thursday='weekday',
-            Friday='weekday',
-            Saturday='weekend')
-  dates$type <- type[dates$weekday]
+  dates <- function(startDate, endDate) {
+    # This function creates a data frame where each row represents a day
+    # (starting from 'startDate' and ending on 'endDate') containing the day
+    # of the week, whether or not the day is a weekday or a weekend day, and
+    # the number of nurses working that day. Using the value for number of
+    # nurses that worked each day, later we will create a data frame to
+    # represent each nurse's daily responses to the questions asked by the
+    # survey.
+    
+    # Create a list of possible dates to sample from:
+    # |    date    |  weekday | day |  type   | numNurses |
+    # | 1998/03/08 |  Sunday  |  0  | weekend |     7     |
+    # | 1998/03/09 |  Monday  |  1  | weekday |     9     |
+    #                .
+    #                .
+    #                .
+    dates <- data.frame(date=seq.Date(startDate, endDate, by='day'))
+    dates$weekday <- weekdays(as.Date(dates$date))
+    dates$day <- as.POSIXlt(dates$date)$wday
+    type <- c(Sunday='weekend',
+              Monday='weekday',
+              Tuesday='weekday',
+              Wednesday='weekday',
+              Thursday='weekday',
+              Friday='weekday',
+              Saturday='weekend')
+    dates$type <- type[dates$weekday]
+    dates
+  }
   
   # Sample number of nurses worked per day on weekdays
   dates$numNurses <- NA
