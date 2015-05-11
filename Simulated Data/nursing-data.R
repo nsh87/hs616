@@ -235,7 +235,12 @@ generateDataSet <- function(startDate, endDate) {
   
   #hist(as.integer(dataSet$employeeID[dataSet$typeOfDay == 'weekday']))
   #hist(as.integer(dataSet$employeeID[dataSet$typeOfDay == 'weekend']))
-
+  
+  # Convert Quality of Care to "Poor", "Fair", etc.
+  dataSet$qualOfCare <- cut(as.numeric(dataSet$qualOfCare), 4, c("Poor", "Fair", "Good", "Excellent"))
+  
+  # TODO: Add related survey question responses
+  
   # Return the dataSet without typeOfDay
   data.frame(subset(dataSet, select=(c("date",
                                        "employeeID",
