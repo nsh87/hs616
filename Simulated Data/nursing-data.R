@@ -190,6 +190,75 @@ generateDataSet <- function(startDate, endDate) {
     dataSet
   }
   dataSet <- relateQualOfCareToNumPatients()
+  
+  addEmployeeID <- function(){
+    # Adds a column of employee IDs, where on the weekend certain employees are
+    # more likely to work.
+    
+    # Number of employees should be greater than their maximum daily staff
+    ids <- runif(max(dataSet$numDailyStaffedNurses) + 15, 0, 9000)
+    ids <- paste0('00', as.integer(ids))  # Add 00s before ID for realism
+    
+    dataSet$employeeID <- NA
+    
+    # For every day, need to get a sample of employee IDs
+    for (d in unique(dataSet$date)) {
+      dailyResponses <- subset(dataSet, date == d)
+      numResponses <- nrow(dailyResponses)
+      typeOfDay <- dailyResponses$typeOfDay[1]
+      if (typeOfDay %in% c('Saturday', 'Sunday')) {
+        # Sample the employee IDs using a normal distribution around the middle
+        # of the 'ids'. This makes the employee IDs in the middle more likely to
+        # work on the weekends.
+        idsList <- sample(x=ids,
+                          size=numResponses,
+                          replace=F,
+                          prob=abs(rnorm(length(ids),
+                                         mean=(length(ids)/2),
+                                         sd=2)
+                                   )
+        )
+      } else {
+        # Otherwise, if it's a weekday just get a random employee ID
+        idsList <- sample(x=ids, size=numResponses, replace=F)
+      }
+      dataSet$employeeID[dataSet$date == d] <- idsList
+    }
+    
+    
+#     dataSet$employeeID <- vapply(dataSet$date, FUN.VALUE=character(5), function(d){
+#       numResponses <- length(dataSet$date[dataSet$date == d])
+#       typeOfDay <- dataSet$typeOfDay[dataSet$date == d][1]
+#       if (typeOfDay %in% c('Saturday', 'Sunday')) {
+#         dataSet$employeeID[dataSet$date == d] <- sample(x=ids, 
+#                                                         size=numResponses,
+#                                                         replace=F,
+#                                                         prob=abs(rnorm(length(ids),
+#                                                                        mean=(length(ids)/2),
+#                                                                        sd=2)
+#                                                         )
+#         )
+#       } else {
+#         dataSet$employeeID[dataSet$date == d] <- sample(x=ids,
+#                                                         size=numResponses)
+#       }
+#     })
+
+
+#     weekendWorkers <- dataSet$employeeID[dataSet$typeOfDay == 'weekend']
+#     numWeekendRows <- length(weekendWorkers)
+#     # Sample the employee IDs using a normal distribution around the middle
+#     # of the 'ids'. This makes the employee IDs in the middle more likely to
+#     # work on the weekends.
+#     dataSet$employeeID[dataSet$typeOfDay == 'weekend'] <- sample(x=ids, 
+#                              size=numWeekendRows,
+#                              replace=F,
+#                              prob=abs(rnorm(length(ids),
+#                                             mean=(length(ids)/2),
+#                                             sd=10)
+#                                       )
+#     )         
+  }
 }
 
 analyzeDataSet <- function(dataSet) {
@@ -197,6 +266,6 @@ analyzeDataSet <- function(dataSet) {
   print(summary(m))
 }
 
-dataSet <- generateDataSet(startDate="1900/03/08", endDate="2007/12/01")
+dataSet <- generateDataSet(startDate="1998/03/08", endDate="2007/12/01")
 analyzeDataSet(dataSet)
 
