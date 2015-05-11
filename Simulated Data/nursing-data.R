@@ -170,8 +170,9 @@ generateDataSet <- function() {
       -1.78*x + 9 + rpois(1, lambda=2)
       # Adds some variability using Poisson distribution. With lambda=2, the
       # distribution should have mode=1, min=0, max=8, mean=2. The idea is that
-      # on a given day a hospital could get overloaded, but the likelihood of
-      # getting overloaded by N patients decreases as N increases.
+      # on a given day a nurse could get overloaded by caring for more patients,
+      # but the likelihood of getting overloaded by N patients decreases as N
+      # increases.
       # Visualize: http://www.umass.edu/wsp/resources/poisson/
     }
 
