@@ -206,6 +206,9 @@ generateDataSet <- function(startDate, endDate) {
       dailyResponses <- subset(dataSet, date == d)
       numResponses <- nrow(dailyResponses)
       typeOfDay <- dailyResponses$typeOfDay[1]
+      
+      prob <- rnorm(length(ids), mean=.8, sd=0)
+      prob <- exp(p)/sum(exp(p))  # Make probabilityies sum to 1
       if (typeOfDay %in% c('Saturday', 'Sunday')) {
         # Sample the employee IDs using a normal distribution around the middle
         # of the 'ids'. This makes the employee IDs in the middle more likely to
@@ -213,52 +216,32 @@ generateDataSet <- function(startDate, endDate) {
         idsList <- sample(x=ids,
                           size=numResponses,
                           replace=F,
-                          prob=abs(rnorm(length(ids),
-                                         mean=(length(ids)/2),
-                                         sd=2)
-                                   )
+                          prob=prob)
         )
       } else {
-        # Otherwise, if it's a weekday just get a random employee ID
-        idsList <- sample(x=ids, size=numResponses, replace=F)
+        # Otherwise, if it's a weekday most likely get a non-weekend employee
+        idsList <- sample(x=ids,
+                          size=numResponses,
+                          replace=F,
+                          prob=1-prob)
+        )
       }
       dataSet$employeeID[dataSet$date == d] <- idsList
     }
-    
-    
-#     dataSet$employeeID <- vapply(dataSet$date, FUN.VALUE=character(5), function(d){
-#       numResponses <- length(dataSet$date[dataSet$date == d])
-#       typeOfDay <- dataSet$typeOfDay[dataSet$date == d][1]
-#       if (typeOfDay %in% c('Saturday', 'Sunday')) {
-#         dataSet$employeeID[dataSet$date == d] <- sample(x=ids, 
-#                                                         size=numResponses,
-#                                                         replace=F,
-#                                                         prob=abs(rnorm(length(ids),
-#                                                                        mean=(length(ids)/2),
-#                                                                        sd=2)
-#                                                         )
-#         )
-#       } else {
-#         dataSet$employeeID[dataSet$date == d] <- sample(x=ids,
-#                                                         size=numResponses)
-#       }
-#     })
-
-
-#     weekendWorkers <- dataSet$employeeID[dataSet$typeOfDay == 'weekend']
-#     numWeekendRows <- length(weekendWorkers)
-#     # Sample the employee IDs using a normal distribution around the middle
-#     # of the 'ids'. This makes the employee IDs in the middle more likely to
-#     # work on the weekends.
-#     dataSet$employeeID[dataSet$typeOfDay == 'weekend'] <- sample(x=ids, 
-#                              size=numWeekendRows,
-#                              replace=F,
-#                              prob=abs(rnorm(length(ids),
-#                                             mean=(length(ids)/2),
-#                                             sd=10)
-#                                       )
-#     )         
+    dataSet
   }
+  dataSet <- addEmployeeID()
+  
+  hist(as.integer(dataSet$employeeID[dataSet$typeOfDay == 'weekday']))
+  hist(as.integer(dataSet$employeeID[dataSet$typeOfDay == 'weekend']))
+
+  # Return the dataSet without typeOfDay
+  data.frame(subset(dataSet, select=(c("date",
+                                       "employeeID",
+                                       "qualOfCare",
+                                       "patientWorkload",
+                                       "numDailyStaffedNurses")))
+  )
 }
 
 analyzeDataSet <- function(dataSet) {
@@ -269,3 +252,8 @@ analyzeDataSet <- function(dataSet) {
 dataSet <- generateDataSet(startDate="1998/03/08", endDate="2007/12/01")
 analyzeDataSet(dataSet)
 
+confound <- function(dataSet) {
+  # Confound the dataSet by selecting a few employees who lie about the
+  # quality of care their patients received because they are afraid of
+  # repercussions from their manager.
+}
