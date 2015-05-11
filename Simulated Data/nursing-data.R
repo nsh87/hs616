@@ -40,8 +40,8 @@ generateDataSet <- function() {
   startDate="1998/03/08"
   endDate="2007/12/01"
   qualOfCare <- c("Poor", "Fair", "Good", "Excellent")
-  numWeekdayNurses <- c(mean=11, std=1.2)
-  numWeekendNurses <- c(mean=6, std=1)
+  numNurses <- c(weekday=c(mean=11, sd=1.2),
+                 weekend=c(mean=6, sd=1))
   numTasksUndone <- c(0:7)
   numTasksUndoneMean <- c(weekday=1.9, weekend=4.1)
   numSafetyProbs <- c(0:4)
@@ -80,26 +80,31 @@ generateDataSet <- function() {
                    Friday='weekday',
                    Saturday='weekend')
     eachDay$typeOfDay <- typeOfDay[eachDay$dayOfWeek]
+
+    # Create column containing number of nurses that worked that day, which
+    # depends on whether or not the day is a 'weekday' or 'weekend' day.
+    eachDay$numNurses <- NA
+    for (w in c('weekday', 'weekend')) {
+      # You need to get mean and STD of number of nurses using the variable
+      # 'numNurses' and index it like: numNurses['weekday.mean'] or
+      # numNurses['weekend.sd']. Build those index values first:
+      mean <- paste(w, 'mean', sep='.')  # 'weekday.mean' or 'weekend.mean'
+      sd <- paste(w, 'sd', sep='.')  # 'weekday.sd' or 'weekend.sd'
+      # Pull out all 'weekday' or 'weekend' days, depending on which 'w' we
+      # are on in the for loop, and add the number of nurses from a normal
+      # distribution whose parameters have already been set in 'numNurses'.
+      numDaysOfType <- sum(eachDay$typeOfDay == w)
+      sampleNurses <- rnorm(n=numDaysOfType,
+                            mean=numNurses[mean],
+                            sd=numNurses[sd])
+      sampleNurses <- as.integer(round(sampleNurses), digits=0)
+      eachDay$numNurses[eachDay$typeOfDay == w] <- sampleNurses
+    }
     eachDay
   }
   eachDay <- genDaysFromRange(startDate, endDate)
   
-  # Sample number of nurses worked per day on weekdays
-  dates$numNurses <- NA
-  dates$numNurses[dates$type == 'weekday'] <- round(
-    rnorm(n=length(dates$numNurses[dates$type == 'weekday']),
-          mean=numWeekdayNurses['mean'],
-          sd=numWeekdayNurses['std']),
-    digits=0
-  )
-  # And on weekends
-  dates$numNurses[dates$type == 'weekend'] <- round(
-    rnorm(n=length(dates$numNurses[dates$type == 'weekend']),
-          mean=numWeekendNurses['mean'],
-          sd=numWeekendNurses['std']),
-    digits=0
-  )
-  
+
   # print(mean(dates$numNurses))
   # print(mean(dates$numNurses[dates$type == 'weekday']))
   # print(mean(dates$numNurses[dates$type == 'weekend']))
