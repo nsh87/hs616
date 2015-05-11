@@ -272,7 +272,7 @@ confound <- function(dataSet) {
   dishonestEmployees <- sample(unique(dataSet$employeeID), size=4, replace=F)
   s <- dataSet$employeeID %in% dishonestEmployees  # Get logical vector
   # Use logical vector to select rows and col
-  dataSet[s, grep('qualOfCare', colnames(dataSet))] <- 4
+  dataSet[s, grep('qualOfCare', colnames(dataSet))] <- 'Excellent'  
   dataSet
 }
 dataSet <- confound(dataSet)
