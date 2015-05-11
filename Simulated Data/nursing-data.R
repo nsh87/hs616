@@ -241,8 +241,7 @@ generateDataSet <- function(startDate, endDate) {
                                        "employeeID",
                                        "qualOfCare",
                                        "patientWorkload",
-                                       "numDailyStaffedNurses",
-                                       "typeOfDay")))
+                                       "numDailyStaffedNurses")))
   )
 }
 
@@ -257,5 +256,15 @@ analyzeDataSet(dataSet)
 confound <- function(dataSet) {
   # Confound the dataSet by selecting a few employees who lie about the
   # quality of care their patients received because they are afraid of
-  # repercussions from their manager.
+  # repercussions from their manager. These employees always say Quality of Care
+  # is Excellent.
+  dishonestEmployees <- sample(unique(dataSet$employeeID), size=4, replace=F)
+  s <- dataSet$employeeID %in% dishonestEmployees  # Get logical vector
+  # Use logical vector to select rows and col
+  dataSet[s, grep('qualOfCare', colnames(dataSet))] <- 4
+  dataSet
 }
+dataSet <- confound(dataSet)
+analyzeDataSet(dataSet)
+
+
