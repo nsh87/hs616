@@ -207,15 +207,16 @@ generateDataSet <- function(startDate, endDate) {
       numResponses <- nrow(dailyResponses)
       typeOfDay <- dailyResponses$typeOfDay[1]
       
-      if (typeOfDay %in% c('Saturday', 'Sunday')) {
-        # Sample the employee IDs using a normal distribution around the middle
-        # of the 'ids'. This makes the employee IDs in the middle more likely to
-        # work on the weekends.
-        p <- rep(0, length(ids))
-        p[1:3] <- 0.15
-        p[4:6] <- 0.12
-        p[7:9] <- 0.05
-        p[10:11] <- 0.02
+      # Sample the employee IDs using a custom probability distrubition on
+      # the IDs. This makes some employees more likely to work the weekends, and
+      # other employees never work the weekends:
+      p <- rep(0, length(ids))
+      p[1:2] <- 0.22
+      p[3] <- 0.01
+      p[4:6] <- 0.12
+      p[7:9] <- 0.05
+      p[10:11] <- 0.02
+      if (typeOfDay == 'weekend') {
         idsList <- sample(x=ids,
                           size=numResponses,
                           replace=F,
