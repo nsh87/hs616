@@ -249,13 +249,19 @@ generateDataSet <- function(startDate, endDate) {
                                        "numDailyStaffedNurses")))
   )
 }
+dataSet <- generateDataSet(startDate="1998/03/08", endDate="2007/12/01")
 
 analyzeDataSet <- function(dataSet) {
-  m <- lm(dataSet$patientWorkload ~ dataSet$qualOfCare)
+  # Convert qualOfCare to numeric
+  dataSet$qualOfCareNum <- NA
+  dataSet$qualOfCareNum[dataSet$qualOfCare == "Poor"] <- 1
+  dataSet$qualOfCareNum[dataSet$qualOfCare == "Fair"] <- 2
+  dataSet$qualOfCareNum[dataSet$qualOfCare == "Good"] <- 3
+  dataSet$qualOfCareNum[dataSet$qualOfCare == "Excellent"] <- 4
+  
+  m <- lm(dataSet$patientWorkload ~ dataSet$qualOfCareNum)
   print(summary(m))
 }
-
-dataSet <- generateDataSet(startDate="1998/03/08", endDate="2007/12/01")
 analyzeDataSet(dataSet)
 
 confound <- function(dataSet) {
