@@ -34,11 +34,9 @@
 
 ##### Create Data Set #####
 
-generateDataSet <- function() {
+generateDataSet <- function(startDate, endDate) {
   
   # Set constraints
-  startDate="1998/03/08"
-  endDate="2007/12/01"
   qualOfCareOptions <- c("Poor", "Fair", "Good", "Excellent")
   qualOfCareProb <- list(weekday=c(.02, .04, .30, .64),
                       weekend=c(.4, .33, .21, .06))
@@ -167,7 +165,7 @@ generateDataSet <- function() {
     
     linRelate <- function(x) {
       # The linear relationship to be applied to qualOfCare
-      -1.78*x + 9 + rpois(1, lambda=2)
+      -1.76*x + 9 + rpois(1, lambda=2)
       # Adds some variability using Poisson distribution. With lambda=2, the
       # distribution should have mode=1, min=0, max=8, mean=2. The idea is that
       # on a given day a nurse could get overloaded by caring for more patients,
@@ -192,23 +190,13 @@ generateDataSet <- function() {
     dataSet
   }
   dataSet <- relateQualOfCareToNumPatients()
-
-    ## Add number of staffed nurses that day for verification
-    dataSet$numStaffedNursesDailyTotal <- NA
-    dataSet$numStaffedNursesDailyTotal <- vapply(dataSet$date, FUN.VALUE=double(1), FUN=function(d){
-      length(dataSet$date[dataSet$date == d])
-    })
-    mean(dataSet$numStaffedNursesDailyTotal[dataSet$type == 'weekday'])
-    mean(dataSet$numStaffedNursesDailyTotal[dataSet$type == 'weekend'])
-    min(dataSet$numStaffedNursesDailyTotal)
-    max(dataSet$numStaffedNursesDailyTotal)
-    
-    m <- lm(dataSet$numPatientsCaredFor ~ dataSet$qualOfCare)
-    summary(m)
-    
-    m <- lm(dataSet$qualOfCare ~ dataSet$numPatientsCaredFor)
-    summary(m)
 }
-generateDataSet()
 
+analyzeDataSet <- function(dataSet) {
+  m <- lm(dataSet$patientWorkload ~ dataSet$qualOfCare)
+  print(summary(m))
+}
+
+dataSet <- generateDataSet(startDate="1900/03/08", endDate="2007/12/01")
+analyzeDataSet(dataSet)
 
