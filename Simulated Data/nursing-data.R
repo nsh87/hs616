@@ -207,24 +207,24 @@ generateDataSet <- function(startDate, endDate) {
       numResponses <- nrow(dailyResponses)
       typeOfDay <- dailyResponses$typeOfDay[1]
       
-      prob <- rnorm(length(ids), mean=.8, sd=0)
-      prob <- exp(p)/sum(exp(p))  # Make probabilityies sum to 1
       if (typeOfDay %in% c('Saturday', 'Sunday')) {
         # Sample the employee IDs using a normal distribution around the middle
         # of the 'ids'. This makes the employee IDs in the middle more likely to
         # work on the weekends.
+        p <- rep(0, length(ids))
+        p[1:3] <- 0.15
+        p[4:6] <- 0.12
+        p[7:9] <- 0.05
+        p[10:11] <- 0.02
         idsList <- sample(x=ids,
                           size=numResponses,
                           replace=F,
-                          prob=prob)
-        )
+                          prob=p)
       } else {
-        # Otherwise, if it's a weekday most likely get a non-weekend employee
+        # Otherwise, if it's a weekday get a random employee ID
         idsList <- sample(x=ids,
                           size=numResponses,
-                          replace=F,
-                          prob=1-prob)
-        )
+                          replace=F)
       }
       dataSet$employeeID[dataSet$date == d] <- idsList
     }
@@ -232,15 +232,16 @@ generateDataSet <- function(startDate, endDate) {
   }
   dataSet <- addEmployeeID()
   
-  hist(as.integer(dataSet$employeeID[dataSet$typeOfDay == 'weekday']))
-  hist(as.integer(dataSet$employeeID[dataSet$typeOfDay == 'weekend']))
+  #hist(as.integer(dataSet$employeeID[dataSet$typeOfDay == 'weekday']))
+  #hist(as.integer(dataSet$employeeID[dataSet$typeOfDay == 'weekend']))
 
   # Return the dataSet without typeOfDay
   data.frame(subset(dataSet, select=(c("date",
                                        "employeeID",
                                        "qualOfCare",
                                        "patientWorkload",
-                                       "numDailyStaffedNurses")))
+                                       "numDailyStaffedNurses",
+                                       "typeOfDay")))
   )
 }
 
