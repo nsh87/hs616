@@ -22,7 +22,7 @@
 # hospital can do to imporove patient care. The hospital has no knowledge
 # of what factors correlate with patient care and is hoping to use the data
 # obtained to discover relationships between the various response that will
-# help them improve patient care.
+# help them achieve their goal.
 # 
 # Feature 1 - Sex: M/F
 # Feature 2 - Quality of care as rated by nurses: Poor, Fair, Good, Excellent
@@ -38,18 +38,12 @@ generateDataSet <- function() {
   
   ## Set Constraints ##
   qualOfCare <- c("Poor", "Fair", "Good", "Excellent")
-  qualOfCareMean <- c(weekday=3.3, weekend=1.8)
-  qualOfCareSTD <- c(weekday=1.8, weekend=0.9)
   
   numWeekdayNurses <- c(mean=11, std=1.2)
   numWeekendNurses <- c(mean=6, std=1)
   
-  numPatientsCaredFor <- c(1:28)
-  numPatientsCaredForMean <- c(weekday=6.3, weekend=11.3)
-  numPatientsCaredForSTD <- c(weekday=3.4, weekend=1.4)
-  
   numTasksUndone <- c(0:7)
-  numTasksUndoneMean <- c(weekday=0.9, weekend=2.1)
+  numTasksUndoneMean <- c(weekday=1.9, weekend=4.1)
   
   numSafetyProbs <- c(0:4)
   numSafetyProbsMean <- c(weekday=0.4, weekend=1.1)
@@ -159,6 +153,12 @@ generateDataSet <- function() {
   mean(dataSet$numStaffedNursesDailyTotal[dataSet$type == 'weekend'])
   min(dataSet$numStaffedNursesDailyTotal)
   max(dataSet$numStaffedNursesDailyTotal)
+  
+  m <- lm(dataSet$numPatientsCaredFor ~ dataSet$qualOfCare)
+  summary(m)
+  
+  m <- lm(dataSet$qualOfCare ~ dataSet$numPatientsCaredFor)
+  summary(m)
   
 }
 
