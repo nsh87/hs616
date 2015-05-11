@@ -39,9 +39,12 @@ generateDataSet <- function() {
   # Set constraints
   startDate="1998/03/08"
   endDate="2007/12/01"
-  qualOfCare <- c("Poor", "Fair", "Good", "Excellent")
+  qualOfCareOptions <- c("Poor", "Fair", "Good", "Excellent")
+  qualOfCareProb <- list(weekday=c(.02, .04, .30, .64),
+                      weekend=c(.4, .33, .21, .06))
   numNurses <- c(weekday=c(mean=11, sd=1.2),
                  weekend=c(mean=6, sd=1))
+  
   numTasksUndone <- c(0:7)
   numTasksUndoneMean <- c(weekday=1.9, weekend=4.1)
   numSafetyProbs <- c(0:4)
@@ -104,77 +107,97 @@ generateDataSet <- function() {
   }
   eachDay <- genDaysFromRange(startDate, endDate)
   
+  #print(mean(eachDay$numNurses))
+  #print(mean(eachDay$numNurses[eachDay$typeOfDay == 'weekday']))
+  #print(mean(eachDay$numNurses[eachDay$typeOfDay == 'weekend']))
+    
+  expandRows <- function() {
+    # This function takes the data frame generated earlier (which contains
+    # the number of nurses working per day) and expands that rows so there is a
+    # row for *each nurse* that worked *each day*. In other words, this
+    # function will expand each day in N times, where N is the numNurses
+    # that worked that day. These expanded rows will contain the daily responses
+    # nurses enter into the system after they finish a shift.
+    
+    # Repeate each row "number_of_times=numNurses", taking columns 1 & 3, and
+    # setting row.names to NULL:
+    dataSet <- data.frame(eachDay[rep(c(1:nrow(eachDay)), eachDay$numNurses),
+                                  c(1, 3)],
+                          row.names=NULL)
+    # Set column headers of the expanded data frame
+    names(dataSet) <- c('date', 'typeOfDay')
+    dataSet
+  }
+  dataSet <- expandRows()
 
-  # print(mean(dates$numNurses))
-  # print(mean(dates$numNurses[dates$type == 'weekday']))
-  # print(mean(dates$numNurses[dates$type == 'weekend']))
-  ## End Dates Creation ##
+  setQualOfCareRating <- function() {
+    # Creates a column containg Quality of Care ratings for 'weekday' and
+    # 'weekend' days. Quality of Care on the weekend will generally be lower
+    # because the number of nurses is lower. Quality of Care is rated by nurses
+    # as Poor, Fair, Good, or Excellent, but here we will use 1-4 to represent
+    # these values during data generation.
+    
+    dataSet$qualOfCare = NA
+    for (w in c('weekday', 'weekend')) {
+      rowsOfType <- dataSet$qualOfCare[dataSet$typeOfDay == w]
+      qualRating <- sample(x=c(1:length(qualOfCareOptions)),
+                           size=length(rowsOfType),
+                           prob=as.numeric(unlist(qualOfCareProb[w])),
+                           replace=T)
+      dataSet$qualOfCare[dataSet$typeOfDay == w] <- qualRating
+    }
+    dataSet
+  }
+  dataSet <- setQualOfCareRating()
   
-  
-  ## Create data frame of entries based on daily values ##
-  # Expands each day in the dates data frame N times, where N is
-  # dates$numNurses, so for each day you have an entry for every nurse working
-  # that day.
-  dataSet <- data.frame(dates[rep(c(1:nrow(dates)), dates$numNurses), c(1, 4)],
-                        row.names=NULL
-  )
-  # Above, c(1, 4) tells to take columns 1 and 4 from the 'dates' data frame.
-  names(dataSet) <- c('date', 'type')
-  
-  # Set quality rating for weekend and weekday
-  dataSet$qualOfCare = NA
-  # Weekdays
-  weekdayRows <- dataSet$qualOfCare[dataSet$type == 'weekday']
-  qualRatingWeekday <- sample(x=c(1:4),
-                              size=length(weekdayRows),
-                              replace=TRUE,
-                              prob=c(.02, .04, .30, .64)
-  )
-  # mean(qualRatingWeekday)
-  # sd(qualRatingWeekday)
-  # hist(qualRatingWeekday)
-  dataSet$qualOfCare[dataSet$type == 'weekday'] <- qualRatingWeekday
-  # Weekend
-  weekendRows <- dataSet$qualOfCare[dataSet$type == 'weekend']
-  qualRatingWeekend <- sample(x=c(1:4),
-                              size=length(weekendRows),
-                              replace=TRUE,
-                              prob=c(.4, .33, .21, .06))
-  # mean(qualRatingWeekend)
-  # sd(qualRatingWeekend)
-  # hist(qualRatingWeekend)
-  dataSet$qualOfCare[dataSet$type == 'weekend'] <- qualRatingWeekend
-  
-  
-  ## Set linear relationship between quality of care and other stuff
-  dataSet$numPatientsCaredFor <- NA
-  dataSet$numPatientsCaredFor[dataSet$type == 'weekday'] <- vapply(dataSet$qualOfCare[dataSet$type == 'weekday'], FUN.VALUE=double(1), FUN=function(qual){
-    round((-1.76*qual + sample(c(-2:2, by=.1), size=1) + 10), digits=0)
-  })
-  dataSet$numPatientsCaredFor[dataSet$type == 'weekend'] <- vapply(dataSet$qualOfCare[dataSet$type == 'weekend'], FUN.VALUE=double(1), FUN=function(qual){
-    round((-1.76*qual + sample(c(-2:2, by=.1), size=1) + 10), digits=0)
-  })
-  # dataSet$numPatientsCaredFor <- 1.76*(dataSet$qualOfCare) + sample(c(-4:4, by=.1), size=1) + 10
-  mean(dataSet$numPatientsCaredFor[dataSet$type == 'weekday'])
-  mean(dataSet$numPatientsCaredFor[dataSet$type == 'weekend'])
-  min(dataSet$numPatientsCaredFor)
-  max(dataSet$numPatientsCaredFor)
-  
-  ## Add number of staffed nurses that day for verification
-  dataSet$numStaffedNursesDailyTotal <- NA
-  dataSet$numStaffedNursesDailyTotal <- vapply(dataSet$date, FUN.VALUE=double(1), FUN=function(d){
-    length(dataSet$date[dataSet$date == d])
-  })
-  mean(dataSet$numStaffedNursesDailyTotal[dataSet$type == 'weekday'])
-  mean(dataSet$numStaffedNursesDailyTotal[dataSet$type == 'weekend'])
-  min(dataSet$numStaffedNursesDailyTotal)
-  max(dataSet$numStaffedNursesDailyTotal)
-  
-  m <- lm(dataSet$numPatientsCaredFor ~ dataSet$qualOfCare)
-  summary(m)
-  
-  m <- lm(dataSet$qualOfCare ~ dataSet$numPatientsCaredFor)
-  summary(m)
+  #for (w in c('weekday', 'weekend')) {
+  #  print(mean(dataSet$qualOfCare[dataSet$typeOfDay == w]))
+  #  print(sd(dataSet$qualOfCare[dataSet$typeOfDay == w]))
+  #  hist(dataSet$qualOfCare[dataSet$typeOfDay == w])
+  #}
+
+  relateQualOfCareToNumPatients <- function() {
+    # Creates a column 'numPatientsCaredFor' which is linearly related to
+    # qualOfCare. In the paper, the relationship between the two variables is
+    # argued to be in the reverse (i.e. that Quality of Care rating depends on
+    # Number of Patients). This is not being refuted, here, we are simply using
+    # a reverse relationship to generate the data set. The linearly relationship
+    # will exist no matter which variable we have depend on which, so it is up
+    # to the analyst to interpret the direction of the relationship.
+    
+    dataSet$numPatientsCaredFor <- NA
+    
+    
+    
+  }
+    ## Set linear relationship between quality of care and other stuff
+    dataSet$numPatientsCaredFor[dataSet$type == 'weekday'] <- vapply(dataSet$qualOfCare[dataSet$type == 'weekday'], FUN.VALUE=double(1), FUN=function(qual){
+      round((-1.76*qual + sample(c(-2:2, by=.1), size=1) + 10), digits=0)
+    })
+    dataSet$numPatientsCaredFor[dataSet$type == 'weekend'] <- vapply(dataSet$qualOfCare[dataSet$type == 'weekend'], FUN.VALUE=double(1), FUN=function(qual){
+      round((-1.76*qual + sample(c(-2:2, by=.1), size=1) + 10), digits=0)
+    })
+    # dataSet$numPatientsCaredFor <- 1.76*(dataSet$qualOfCare) + sample(c(-4:4, by=.1), size=1) + 10
+    mean(dataSet$numPatientsCaredFor[dataSet$type == 'weekday'])
+    mean(dataSet$numPatientsCaredFor[dataSet$type == 'weekend'])
+    min(dataSet$numPatientsCaredFor)
+    max(dataSet$numPatientsCaredFor)
+    
+    ## Add number of staffed nurses that day for verification
+    dataSet$numStaffedNursesDailyTotal <- NA
+    dataSet$numStaffedNursesDailyTotal <- vapply(dataSet$date, FUN.VALUE=double(1), FUN=function(d){
+      length(dataSet$date[dataSet$date == d])
+    })
+    mean(dataSet$numStaffedNursesDailyTotal[dataSet$type == 'weekday'])
+    mean(dataSet$numStaffedNursesDailyTotal[dataSet$type == 'weekend'])
+    min(dataSet$numStaffedNursesDailyTotal)
+    max(dataSet$numStaffedNursesDailyTotal)
+    
+    m <- lm(dataSet$numPatientsCaredFor ~ dataSet$qualOfCare)
+    summary(m)
+    
+    m <- lm(dataSet$qualOfCare ~ dataSet$numPatientsCaredFor)
+    summary(m)
 }
 generateDataSet()
 
