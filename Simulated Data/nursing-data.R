@@ -48,7 +48,7 @@ generateDataSet <- function() {
   numSafetyProbsMean <- c(weekday=0.4, weekend=1.1)
   
   
-  dates <- function() {
+  genDaysFromRange <- function(startDate, endDate) {
     # This function creates a data frame where each row represents a day
     # (starting from 'startDate' and ending on 'endDate') containing the day
     # of the week, whether or not the day is a weekday or a weekend day, and
@@ -63,28 +63,26 @@ generateDataSet <- function() {
     #                         etc...
   
     # Create column of dates
-    dates <- data.frame(date=seq.Date(as.Date(startDate),
-                                      as.Date(endDate), 
-                                      by='day')
-                        )
+    eachDay <- data.frame(date=seq.Date(as.Date(startDate),
+                                       as.Date(endDate), 
+                                       by='day')
+                         )
     # Create column identifying each date as 'Sunday', 'Monday', etc.
-    dates$weekday <- weekdays(as.Date(dates$date))
-    # Create column where days of week are represented as 0-7
-    dates$day <- as.POSIXlt(dates$date)$wday
+    eachDay$dayOfWeek <- weekdays(as.Date(eachDay$date))
     # Create column that identifies each day as 'weekday' or 'weekend', using
-    # the value in the 'weekday' column to lookup whether or not the day is a
+    # the value in the 'dayOfWeek' column to lookup whether or not the day is a
     # 'weekday' or 'weekend' day.
-    type <- c(Sunday='weekend',
-              Monday='weekday',
-              Tuesday='weekday',
-              Wednesday='weekday',
-              Thursday='weekday',
-              Friday='weekday',
-              Saturday='weekend')
-    dates$type <- type[dates$weekday]
-    dates
+    typeOfDay <- c(Sunday='weekend',
+                   Monday='weekday',
+                   Tuesday='weekday',
+                   Wednesday='weekday',
+                   Thursday='weekday',
+                   Friday='weekday',
+                   Saturday='weekend')
+    eachDay$typeOfDay <- typeOfDay[eachDay$dayOfWeek]
+    eachDay
   }
-  dates <- dates()
+  eachDay <- genDaysFromRange(startDate, endDate)
   
   # Sample number of nurses worked per day on weekdays
   dates$numNurses <- NA
