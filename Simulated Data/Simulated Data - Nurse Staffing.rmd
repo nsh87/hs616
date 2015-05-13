@@ -51,10 +51,10 @@ ranges for each response type.
 
 ## Code
 
-A single function to create the simulated data set, `generateDataSet`, is
-defined below. This function takes two inputs, a `startDate` and an `endDate`,
+A single function, `generateDataSet()`, will be used to create the simulated data
+set. This function shall take two inputs, a `startDate` and an `endDate`,
 and generates survey responses for numerous ficticious employees for each day
-between those two dates. Within the function are several sub-functions that
+between those two dates. `generateDataSet()` will run several sub-functions that
 perform the various logical steps in generating the data. These sub-functions
 are:
 
@@ -67,164 +67,209 @@ are:
 * `relateQualOfCareToNumPatients`: create each nurse's Patient Workload
 * `addEmployeeID`: create employee IDs for each survey response
 
-```{r generate_data}
-generateDataSet <- function(startDate, endDate) {
-  
-  # Set constraints
-  qualOfCareOptions <- c("Poor", "Fair", "Good", "Excellent")
-  qualOfCareProb <- list(weekday=c(.02, .04, .30, .64),
-                      weekend=c(.4, .33, .21, .06))
-  numNurses <- c(weekday=c(mean=11, sd=1.2),
-                 weekend=c(mean=6, sd=1))
-  
-  numTasksUndone <- c(0:7)
-  numTasksUndoneMean <- c(weekday=1.9, weekend=4.1)
-  numSafetyProbs <- c(0:4)
-  numSafetyProbsMean <- c(weekday=0.4, weekend=1.1)
-  
-  
-  genDaysFromRange <- function(startDate, endDate) {
-    # This function creates a data frame where each row represents a day
-    # (starting from 'startDate' and ending on 'endDate') containing the day
-    # of the week, whether or not the day is a weekday or a weekend day, and
-    # the number of nurses working that day. Using the value for number of
-    # nurses that worked each day, later we will create a data frame to
-    # represent each nurse's daily responses to the questions asked by the
-    # survey, which we will ultimately return as the final data set.
-    #
-    # |    date    | dayOfWeek | typeOfDay | numNurses |
-    # | 1998/03/08 |   Sunday  |  weekend  |     7     |
-    # | 1998/03/09 |   Monday  |  weekday  |     9     |
-    #                        etc...
-  
-    # Create column of dates
-    eachDay <- data.frame(date=seq.Date(as.Date(startDate),
-                                        as.Date(endDate), 
-                                        by='day'))
-    # Create column identifying each date as 'Sunday', 'Monday', etc.
-    eachDay$dayOfWeek <- weekdays(as.Date(eachDay$date))
-    # Create column that identifies each day as 'weekday' or 'weekend', using
-    # the value in the 'dayOfWeek' column to lookup whether or not the day is a
-    # 'weekday' or 'weekend' day.
-    typeOfDay <- c(Sunday='weekend',
-                   Monday='weekday',
-                   Tuesday='weekday',
-                   Wednesday='weekday',
-                   Thursday='weekday',
-                   Friday='weekday',
-                   Saturday='weekend')
-    eachDay$typeOfDay <- typeOfDay[eachDay$dayOfWeek]
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache=2)
+```
 
-    # Create column containing number of nurses that worked that day, which
-    # depends on whether or not the day is a 'weekday' or 'weekend' day.
-    eachDay$numNurses <- NA
-    for (w in c('weekday', 'weekend')) {
-      # You need to get mean and STD of number of nurses using the variable
-      # 'numNurses' and index it like: numNurses['weekday.mean'] or
-      # numNurses['weekend.sd']. Build those index values first:
-      mean <- paste(w, 'mean', sep='.')  # 'weekday.mean' or 'weekend.mean'
-      sd <- paste(w, 'sd', sep='.')  # 'weekday.sd' or 'weekend.sd'
-      # Pull out all 'weekday' or 'weekend' days, depending on which 'w' we
-      # are on in the for loop, and add the number of nurses from a normal
-      # distribution whose parameters have already been set in 'numNurses'.
-      numDaysOfType <- sum(eachDay$typeOfDay == w)
-      sampleNurses <- rnorm(n=numDaysOfType,
-                            mean=numNurses[mean],
-                            sd=numNurses[sd])
-      sampleNurses <- as.integer(round(sampleNurses), digits=0)
-      eachDay$numNurses[eachDay$typeOfDay == w] <- sampleNurses
+```{r set_constraints}
+# Set constraints
+qualOfCareOptions <- c("Poor", "Fair", "Good", "Excellent")
+qualOfCareProb <- list(weekday=c(.02, .04, .30, .64),
+                       weekend=c(.4, .33, .21, .06))
+numNurses <- c(weekday=c(mean=11, sd=1.2),
+               weekend=c(mean=6, sd=1))
+
+numTasksUndone <- c(0:7)
+numTasksUndoneMean <- c(weekday=1.9, weekend=4.1)
+numSafetyProbs <- c(0:4)
+numSafetyProbsMean <- c(weekday=0.4, weekend=1.1)
+
+startDate="1998/03/08"
+endDate="2007/12/01"
+```
+
+```{r gen_days}
+genDaysFromRange <- function(startDate, endDate) {
+  # This function creates a data frame where each row represents a day
+  # (starting from 'startDate' and ending on 'endDate') containing the day
+  # of the week, whether or not the day is a weekday or a weekend day, and
+  # the number of nurses working that day. Using the value for number of
+  # nurses that worked each day, later we will create a data frame to
+  # represent each nurse's daily responses to the questions asked by the
+  # survey, which we will ultimately return as the final data set.
+  #
+  # |    date    | dayOfWeek | typeOfDay | numNurses |
+  # | 1998/03/08 |   Sunday  |  weekend  |     7     |
+  # | 1998/03/09 |   Monday  |  weekday  |     9     |
+  #                        etc...
+  
+  # Create column of dates
+  eachDay <- data.frame(date=seq.Date(as.Date(startDate),
+                                      as.Date(endDate), 
+                                      by='day'))
+  # Create column identifying each date as 'Sunday', 'Monday', etc.
+  eachDay$dayOfWeek <- weekdays(as.Date(eachDay$date))
+  # Create column that identifies each day as 'weekday' or 'weekend', using
+  # the value in the 'dayOfWeek' column to lookup whether or not the day is a
+  # 'weekday' or 'weekend' day.
+  typeOfDay <- c(Sunday='weekend',
+                 Monday='weekday',
+                 Tuesday='weekday',
+                 Wednesday='weekday',
+                 Thursday='weekday',
+                 Friday='weekday',
+                 Saturday='weekend')
+  eachDay$typeOfDay <- typeOfDay[eachDay$dayOfWeek]
+  
+  # Create column containing number of nurses that worked that day, which
+  # depends on whether or not the day is a 'weekday' or 'weekend' day.
+  eachDay$numNurses <- NA
+  for (w in c('weekday', 'weekend')) {
+    # You need to get mean and STD of number of nurses using the variable
+    # 'numNurses' and index it like: numNurses['weekday.mean'] or
+    # numNurses['weekend.sd']. Build those index values first:
+    mean <- paste(w, 'mean', sep='.')  # 'weekday.mean' or 'weekend.mean'
+    sd <- paste(w, 'sd', sep='.')  # 'weekday.sd' or 'weekend.sd'
+    # Pull out all 'weekday' or 'weekend' days, depending on which 'w' we
+    # are on in the for loop, and add the number of nurses from a normal
+    # distribution whose parameters have already been set in 'numNurses'.
+    numDaysOfType <- sum(eachDay$typeOfDay == w)
+    sampleNurses <- rnorm(n=numDaysOfType,
+                          mean=numNurses[mean],
+                          sd=numNurses[sd])
+    sampleNurses <- as.integer(round(sampleNurses), digits=0)
+    eachDay$numNurses[eachDay$typeOfDay == w] <- sampleNurses
     }
-    eachDay
-  }
-  eachDay <- genDaysFromRange(startDate, endDate)
+  eachDay
+}
+eachDay <- genDaysFromRange(startDate, endDate)
+```
+```{r print_days_table, echo=FALSE, eval=TRUE}
+# Output the head of the eachDay table
+# Source 'knitr' to use kable function later for pretty tables
+options(warn=-1); suppressMessages(library(knitr)); options(warn=0)
+kable(head(eachDay),
+      row.names=F,
+      caption="Head of 'eachDay' data.frame from genDaysFromRange()")
+```
+```{r days_stats, echo=FALSE}
+# Print some stats about the dates data
+print(sprintf("Mean number of nurses: %.2f",
+        mean(eachDay$numNurses)))
+print(sprintf("Mean number of nurses on weekdays: %.2f",
+        mean(eachDay$numNurses[eachDay$typeOfDay == 'weekday'])))
+print(sprintf("Mean number of nurses on weekends: %.2f",
+        mean(eachDay$numNurses[eachDay$typeOfDay == 'weekend'])))
+```
+
+```{r expand_days}
+expandRows <- function(eachDay) {
+  # This function takes the data frame generated earlier (which contains
+  # the number of nurses working per day) and expands those rows so there is a
+  # row for *each nurse* that worked *each day*. In other words, this
+  # function will expand each day in N times, where N is the numNurses
+  # that worked that day. These expanded rows will contain the daily responses
+  # nurses enter into the system after they finish a shift.
   
-  # print(mean(eachDay$numNurses))
-  # print(mean(eachDay$numNurses[eachDay$typeOfDay == 'weekday']))
-  # print(mean(eachDay$numNurses[eachDay$typeOfDay == 'weekend']))
-    
-  expandRows <- function() {
-    # This function takes the data frame generated earlier (which contains
-    # the number of nurses working per day) and expands that rows so there is a
-    # row for *each nurse* that worked *each day*. In other words, this
-    # function will expand each day in N times, where N is the numNurses
-    # that worked that day. These expanded rows will contain the daily responses
-    # nurses enter into the system after they finish a shift.
-    
-    # Repeate each row "number_of_times=numNurses", taking columns 1 & 3, and
-    # setting row.names to NULL:
-    dataSet <- data.frame(eachDay[rep(c(1:nrow(eachDay)), eachDay$numNurses),
-                                  c(1, 3, 4)],
-                          row.names=NULL)
-    # Set column headers of the expanded data frame
-    names(dataSet) <- c('date', 'typeOfDay', 'numDailyStaffedNurses')
-    dataSet
-  }
-  dataSet <- expandRows()
+  # Repeate each row "number_of_times=numNurses", taking columns 1, 3, & 4 and
+  # setting row.names to NULL:
+  dataSet <- data.frame(eachDay[rep(c(1:nrow(eachDay)), eachDay$numNurses),
+                                c(1, 3, 4)],
+                        row.names=NULL)
+  # Set column headers of the expanded data frame
+  names(dataSet) <- c('date', 'typeOfDay', 'numDailyStaffedNurses')
+  dataSet
+}
+dataSet <- expandRows(eachDay)
+```
 
-  setQualOfCareRating <- function() {
-    # Creates a column containg Quality of Care ratings for 'weekday' and
-    # 'weekend' days. Quality of Care on the weekend will generally be lower
-    # because the number of nurses is lower. Quality of Care is rated by nurses
-    # as Poor, Fair, Good, or Excellent, but here we will use 1-4 to represent
-    # these values during data generation.
-    
-    dataSet$qualOfCare = NA
-    for (w in c('weekday', 'weekend')) {
-      rowsOfType <- dataSet$typeOfDay[dataSet$typeOfDay == w]
-      qualRating <- sample(x=c(1:length(qualOfCareOptions)),
-                           size=length(rowsOfType),
-                           prob=as.numeric(unlist(qualOfCareProb[w])),
-                           replace=T)
-      dataSet$qualOfCare[dataSet$typeOfDay == w] <- qualRating
-    }
-    dataSet
-  }
-  dataSet <- setQualOfCareRating()
+```{r qual_of_care}
+setQualOfCareRating <- function(dataSet) {
+  # Creates a column containg Quality of Care ratings for 'weekday' and
+  # 'weekend' days. Quality of Care on the weekend will generally be lower
+  # because the number of nurses is lower. Quality of Care is rated by nurses
+  # as Poor, Fair, Good, or Excellent, but here we will use 1-4 to represent
+  # these values during data generation.
   
-  #for (w in c('weekday', 'weekend')) {
-  #  print(mean(dataSet$qualOfCare[dataSet$typeOfDay == w]))
-  #  print(sd(dataSet$qualOfCare[dataSet$typeOfDay == w]))
-  #  hist(dataSet$qualOfCare[dataSet$typeOfDay == w])
-  #}
-
-  relateQualOfCareToNumPatients <- function() {
-    # Creates a column 'numPatientsCaredFor' which is linearly related to
-    # qualOfCare. In the paper, the relationship between the two variables is
-    # argued to be in the reverse (i.e. that Quality of Care rating depends on
-    # Number of Patients). This is not being refuted, here, we are simply using
-    # a reverse relationship to generate the data set. The linearly relationship
-    # will exist no matter which variable we have depend on which, so it is up
-    # to the analyst to interpret the direction of the relationship.
-    
-    linRelate <- function(x) {
-      # The linear relationship to be applied to qualOfCare
-      -1.76*x + 9 + rpois(1, lambda=2)
-      # Adds some variability using Poisson distribution. With lambda=2, the
-      # distribution should have mode=1, min=0, max=8, mean=2. The idea is that
-      # on a given day a nurse could get overloaded by caring for more patients,
-      # but the likelihood of getting overloaded by N patients decreases as N
-      # increases.
-      # Visualize: http://www.umass.edu/wsp/resources/poisson/
+  dataSet$qualOfCare = NA
+  for (w in c('weekday', 'weekend')) {
+    rowsOfType <- dataSet$typeOfDay[dataSet$typeOfDay == w]
+    qualRating <- sample(x=c(1:length(qualOfCareOptions)),
+                         size=length(rowsOfType),
+                         prob=as.numeric(unlist(qualOfCareProb[w])),
+                         replace=T)
+    dataSet$qualOfCare[dataSet$typeOfDay == w] <- qualRating
     }
+  dataSet
+}
+dataSet <- setQualOfCareRating(dataSet)
+```
+```{r qual_of_care_stats, echo=FALSE}
+# Output quality of care stats
+for (w in c('weekday', 'weekend')) {
+  print(sprintf("Mean quality of care during %s: %.2f",
+                w,
+                mean(dataSet$qualOfCare[dataSet$typeOfDay == w])))
+  print(sprintf("SD for quality of care during %s: %.2f",
+                w,
+                sd(dataSet$qualOfCare[dataSet$typeOfDay == w])))
+}
+```
+```{r qual_of_care_hist, echo=FALSE, fig.width=3, fig.height=3}
+for (w in c('weekday', 'weekend')) {
+  simpleCap <- function(x) {
+    s <- strsplit(x, " ")[[1]]
+    paste(toupper(substring(s, 1, 1)), substring(s, 2), sep = "",
+          collapse = " ")
+    }
+  hist_title <- paste(simpleCap(w), "Quality of Care",
+                      collapse=" ")
+  hist(dataSet$qualOfCare[dataSet$typeOfDay == w],
+       main=hist_title,
+       xlab="Quality of Care Rating")
+}
+```
 
-    dataSet$patientWorkload <- NA
-    for (w in c('weekday', 'weekend')) {
-      rowsOfType <- dataSet$qualOfCare[dataSet$typeOfDay == w]
-      dataSet$patientWorkload[dataSet$typeOfDay == w] <- vapply(
-        rowsOfType,
-        FUN=linRelate,
-        FUN.VALUE=double(1)
+```{r relate_qual_of_care, echo=F, eval=F}
+relateQualOfCareToNumPatients <- function(dataSet) {
+  # Creates a column 'numPatientsCaredFor' which is linearly related to
+  # qualOfCare. In the paper, the relationship between the two variables is
+  # argued to be in the reverse (i.e. that Quality of Care rating depends on
+  # Number of Patients). This is not being refuted, here, we are simply using
+  # a reverse relationship to generate the data set. The linearly relationship
+  # will exist no matter which variable we have depend on which, so it is up
+  # to the analyst to interpret the direction of the relationship.
+  
+  linRelate <- function(x) {
+    # The linear relationship to be applied to qualOfCare
+    -1.76*x + 9 + rpois(1, lambda=2)
+    # Adds some variability using Poisson distribution. With lambda=2, the
+    # distribution should have mode=1, min=0, max=8, mean=2. The idea is that
+    # on a given day a nurse could get overloaded by caring for more patients,
+    # but the likelihood of getting overloaded by N patients decreases as N
+    # increases.
+    # Visualize: http://www.umass.edu/wsp/resources/poisson/
+    }
+  
+  dataSet$patientWorkload <- NA
+  for (w in c('weekday', 'weekend')) {
+    rowsOfType <- dataSet$qualOfCare[dataSet$typeOfDay == w]
+    dataSet$patientWorkload[dataSet$typeOfDay == w] <- vapply(
+      rowsOfType,
+      FUN=linRelate,
+      FUN.VALUE=double(1)
       )
     }
-    # Set the Patient Workload as an integer instead of a decimal value
-    dataSet$patientWorkload <- as.integer(
-      round(dataSet$patientWorkload, digits=0)
+  # Set the Patient Workload as an integer instead of a decimal value
+  dataSet$patientWorkload <- as.integer(
+    round(dataSet$patientWorkload, digits=0)
     )
-    dataSet
-  }
-  dataSet <- relateQualOfCareToNumPatients()
-  
-  addEmployeeID <- function(){
+  dataSet
+}
+```
+
+```{r employee_id, echo=F, eval=F}
+addEmployeeID <- function(dataSet){
     # Adds a column of employee IDs, where on the weekend certain employees are
     # more likely to work.
     
@@ -264,10 +309,33 @@ generateDataSet <- function(startDate, endDate) {
     }
     dataSet
   }
-  dataSet <- addEmployeeID()
+```
+```{r employee_id_hist, echo=F, eval=F}
+employeeHist <- function(dataSet) {
+  # Output histogram of working employees
+  hist(as.integer(dataSet$employeeID[dataSet$typeOfDay == 'weekday']))
+  hist(as.integer(dataSet$employeeID[dataSet$typeOfDay == 'weekend']))
+}
+
+
+```{r gen_data, echo=F, eval=F}
+generateDataSet <- function(startDate, endDate) {
+  eachDay <- genDaysFromRange(startDate, endDate)
+  showDaysTable(eachDay)
+  daysStats(eachDay)
   
-  #hist(as.integer(dataSet$employeeID[dataSet$typeOfDay == 'weekday']))
-  #hist(as.integer(dataSet$employeeID[dataSet$typeOfDay == 'weekend']))
+  dataSet <- expandRows(eachDay)
+  
+  dataSet <- setQualOfCareRating(dataSet)
+  qualOfCareStats(dataSet)
+  
+  dataSet <- relateQualOfCareToNumPatients(dataSet)
+  
+  
+  dataSet <- addEmployeeID(dataSet)
+  employeeHist(dataSet)
+  
+
   
   # Convert Quality of Care to "Poor", "Fair", etc.
   dataSet$qualOfCare <- cut(as.numeric(dataSet$qualOfCare), 4, c("Poor",
@@ -287,21 +355,11 @@ generateDataSet <- function(startDate, endDate) {
 }
 ```
 
-We first create
+Then we run the function to produce the results.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r}
-summary(cars)
+```{r run_generate_data, echo=F, eval=F, results='asis'}
+dataSet <- generateDataSet(startDate="1998/03/08", endDate="2007/12/01")
 ```
-
-You can also embed plots, for example:
-
-```{r, echo=FALSE}
-plot(cars)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
 # References
 
