@@ -1,0 +1,63 @@
+---
+title: "Simulated Data: Nurse Staffing and Quality of Care"
+author: "Nikhil Haas"
+date: "May 13, 2015"
+output: pdf_document
+---
+
+# Introduction
+
+This simulated data set is based on the journal article "Is More Better? The
+Relationship between Nurse Staffing and the Quality of Nursing Care in
+Hospitals" in Medical Care (Sochalski, 2004). In this study, Sochalski
+analyzed data obtained from a 1999 survey of 8,670 inpatient nurses from
+Pennsylvania, U.S.A. hospitals. The survey asked nurses to rate the
+quality of care from their last shift and estimate the number
+of patients they cared for, the number of tasks that went undone, and the
+number of patient safety problems that occurred during the same shift. The
+author found several correlations between the responses to the questions. The
+questions and response data from survey are the inspiration for this simulated
+data set.
+
+# Method
+
+Here, we generate artificial responses to the questions that were in the 1999
+survey. In this simulated scenario, the responses are entered into a hospital
+administrative system over several years by its nurses in an effort to better
+understand what the hospital can do to improve patient care. The hospital has
+no knowledge of what factors correlate with patient care and is hoping to use
+the data obtained to discover relationships that will help them achieve their
+goal of delivering better care.
+
+## Questions and Response Ranges
+
+Nurses have been asked to complete the survey following each shift. Below are
+the columns of data that will hold the response data and the expected ranges
+for each response type.
+
+1. Employee ID: Between 0 and 9000
+2. Quality of care as rated by nurses: Poor, Fair, Good, Excellent
+3. Number of registered nurses on-staff during last shift: 1 - 30
+4. Number of patients cared for during last shift: 0 - 20
+5. Number of tasks that went undone during last shift: 0 - 7
+6. Number of patient safety problems during last shift: 0 - 4
+7. Date this survey was taken: YYYY/MM/DD
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+summary(cars)
+```
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+# References
+
+Sochalski, J. (2004). Is more better?: the relationship between nurse staffing
+and the quality of nursing care in hospitals. Medical care, 42(2), II-67.
