@@ -459,13 +459,13 @@ boxplot(dataSet$patientWorkload ~ dataSet$qualOfCare,
 We see that as patient workload increases the Quality of Care rating decreases.
 What this graph cannot tell you, however, is that patient workload is very high
 during the weekends. This is a key component of the data simulation that should
-be recovered during the analysis phase.
+be discovered during the analysis phase.
 
 For added realism, certain nurses are more likely to be weekend workers than
 others. The histogram below shows the Employee IDs (numeric values between 0 and
 9000) separated by type of day and binned. Employees with IDs between
 approximately 4000 and 6000 appear to not work weekends, and certain other
-employees work weekend more frequently than weekdays.
+employees work weekends more frequently than weekdays.
 
 ```{r employee_id_hist, echo=FALSE, fig.width=3.5, fig.height=3}
 # Output histogram of working employees
@@ -513,3 +513,8 @@ and the quality of nursing care in hospitals. Medical care, 42(2), II-67.
 ```
 ```{r run_generate_data, eval=FALSE}
 ```
+
+```{r write_dataset, echo=FALSE}
+write.csv(dataSet, file="nursing-data.csv", row.names=F)
+```
+

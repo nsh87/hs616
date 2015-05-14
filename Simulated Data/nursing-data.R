@@ -254,6 +254,9 @@ generateDataSet <- function(startDate, endDate) {
 }
 dataSet <- generateDataSet(startDate="1998/03/08", endDate="2007/12/01")
 
+save_path = "/Users/Nikhil/dev/usf/hs-616/hs616/Simulated Data/nursing-data.csv"
+write.csv(dataSet, file=save_path, row.names=F)
+
 analyzeDataSet <- function(dataSet) {
   # Convert qualOfCare to numeric
   dataSet$qualOfCareNum <- NA
