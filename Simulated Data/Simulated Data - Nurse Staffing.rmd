@@ -12,22 +12,22 @@ Relationship between Nurse Staffing and the Quality of Nursing Care in
 Hospitals" in Medical Care (Sochalski, 2004). In this study, Sochalski
 analyzed data obtained from a 1999 survey of 8,670 inpatient nurses from
 Pennsylvania, U.S.A. hospitals. The survey asked nurses to rate the
-quality of care from their last shift and estimate the number
-of patients they cared for, the number of tasks that went undone, and the
-number of patient safety problems that occurred during the same shift. The
+quality of care they delivered to patients during their last shift and estimate
+the number of patients they cared for, the number of tasks that went undone, and
+the number of patient safety problems that occurred during the same shift. The
 author found several correlations between the responses to the questions. The
 questions and response data from survey are the inspiration for this simulated
-data set.
+data set. 
 
 # Method
 
 Here, we generate artificial responses to the questions that were in the 1999
-survey. In this simulated scenario, the responses are entered into a hospital
-administrative system over several years by its nurses in an effort to better
-understand what the hospital can do to improve patient care. The hospital has
-no knowledge of what factors correlate with patient care and is hoping to use
-the data obtained to discover relationships that will help them achieve their
-goal of delivering better care.
+survey. In this simulated scenario, the responses are entered into a mock
+hospital administrative database over several years by its nurses in an effort
+to better understand what the hospital can do to improve patient care. The
+hospital has no knowledge of what factors correlate with patient care and is
+hoping to use the data obtained to discover relationships that will help them
+achieve their goal of delivering better care.
 
 The relationships discovered by Sochalski will drive the correlations between
 survey responses in this simulated data set. However, to attempt to represent
@@ -66,12 +66,41 @@ are:
   response
 * `relateQualOfCareToNumPatients`: create each nurse's Patient Workload
 * `addEmployeeID`: create employee IDs for each survey response
+* `convertQual`: convert Quality of Care from integers to strings 'Poor',
+  'Fair', etc.
+* `filterCols`: remove the tempoary columns that were use during data generation
+
+With these sub-functions, we can then define a single function to generate and
+return the data set:
+
+```{r gen_data, eval=FALSE}
+generateDataSet <- function(startDate, endDate) {
+  eachDay <- genDaysFromRange(startDate, endDate)  
+  dataSet <- expandRows(eachDay)
+  dataSet <- setQualOfCareRating(dataSet)
+  dataSet <- relateQualOfCareToNumPatients(dataSet)
+  dataSet <- addEmployeeID(dataSet)
+  dataSet <- convertQual(dataSet)
+  dataSet <- filterCols(dataSet)
+  )
+  dataSet
+}
+```
+
+Then run the function:
+
+```{r run_generate_data, eval=FALSE}
+dataSet <- generateDataSet(startDate="1998/03/08", endDate="2007/12/01")
+```
+
+The full code can be seen in Appendix A.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(cache=2)
+set.seed(43)
 ```
 
-```{r set_constraints}
+```{r set_constraints, echo=FALSE}
 # Set constraints
 qualOfCareOptions <- c("Poor", "Fair", "Good", "Excellent")
 qualOfCareProb <- list(weekday=c(.02, .04, .30, .64),
@@ -88,7 +117,7 @@ startDate="1998/03/08"
 endDate="2007/12/01"
 ```
 
-```{r gen_days}
+```{r gen_days, echo=FALSE}
 genDaysFromRange <- function(startDate, endDate) {
   # This function creates a data frame where each row represents a day
   # (starting from 'startDate' and ending on 'endDate') containing the day
@@ -142,27 +171,9 @@ genDaysFromRange <- function(startDate, endDate) {
     }
   eachDay
 }
-eachDay <- genDaysFromRange(startDate, endDate)
-```
-```{r print_days_table, echo=FALSE, eval=TRUE}
-# Output the head of the eachDay table
-# Source 'knitr' to use kable function later for pretty tables
-options(warn=-1); suppressMessages(library(knitr)); options(warn=0)
-kable(head(eachDay),
-      row.names=F,
-      caption="Head of 'eachDay' data.frame from genDaysFromRange()")
-```
-```{r days_stats, echo=FALSE}
-# Print some stats about the dates data
-print(sprintf("Mean number of nurses: %.2f",
-        mean(eachDay$numNurses)))
-print(sprintf("Mean number of nurses on weekdays: %.2f",
-        mean(eachDay$numNurses[eachDay$typeOfDay == 'weekday'])))
-print(sprintf("Mean number of nurses on weekends: %.2f",
-        mean(eachDay$numNurses[eachDay$typeOfDay == 'weekend'])))
 ```
 
-```{r expand_days}
+```{r expand_days, echo=FALSE}
 expandRows <- function(eachDay) {
   # This function takes the data frame generated earlier (which contains
   # the number of nurses working per day) and expands those rows so there is a
@@ -180,10 +191,9 @@ expandRows <- function(eachDay) {
   names(dataSet) <- c('date', 'typeOfDay', 'numDailyStaffedNurses')
   dataSet
 }
-dataSet <- expandRows(eachDay)
 ```
 
-```{r qual_of_care}
+```{r qual_of_care, echo=FALSE}
 setQualOfCareRating <- function(dataSet) {
   # Creates a column containg Quality of Care ratings for 'weekday' and
   # 'weekend' days. Quality of Care on the weekend will generally be lower
@@ -202,35 +212,9 @@ setQualOfCareRating <- function(dataSet) {
     }
   dataSet
 }
-dataSet <- setQualOfCareRating(dataSet)
-```
-```{r qual_of_care_stats, echo=FALSE}
-# Output quality of care stats
-for (w in c('weekday', 'weekend')) {
-  print(sprintf("Mean quality of care during %s: %.2f",
-                w,
-                mean(dataSet$qualOfCare[dataSet$typeOfDay == w])))
-  print(sprintf("SD for quality of care during %s: %.2f",
-                w,
-                sd(dataSet$qualOfCare[dataSet$typeOfDay == w])))
-}
-```
-```{r qual_of_care_hist, echo=FALSE, fig.width=3, fig.height=3}
-for (w in c('weekday', 'weekend')) {
-  simpleCap <- function(x) {
-    s <- strsplit(x, " ")[[1]]
-    paste(toupper(substring(s, 1, 1)), substring(s, 2), sep = "",
-          collapse = " ")
-    }
-  hist_title <- paste(simpleCap(w), "Quality of Care",
-                      collapse=" ")
-  hist(dataSet$qualOfCare[dataSet$typeOfDay == w],
-       main=hist_title,
-       xlab="Quality of Care Rating")
-}
 ```
 
-```{r relate_qual_of_care, echo=F, eval=F}
+```{r relate_qual_of_care, echo=FALSE}
 relateQualOfCareToNumPatients <- function(dataSet) {
   # Creates a column 'numPatientsCaredFor' which is linearly related to
   # qualOfCare. In the paper, the relationship between the two variables is
@@ -268,7 +252,7 @@ relateQualOfCareToNumPatients <- function(dataSet) {
 }
 ```
 
-```{r employee_id, echo=F, eval=F}
+```{r employee_id, echo=FALSE}
 addEmployeeID <- function(dataSet){
     # Adds a column of employee IDs, where on the weekend certain employees are
     # more likely to work.
@@ -310,58 +294,129 @@ addEmployeeID <- function(dataSet){
     dataSet
   }
 ```
-```{r employee_id_hist, echo=F, eval=F}
-employeeHist <- function(dataSet) {
-  # Output histogram of working employees
-  hist(as.integer(dataSet$employeeID[dataSet$typeOfDay == 'weekday']))
-  hist(as.integer(dataSet$employeeID[dataSet$typeOfDay == 'weekend']))
-}
 
-
-```{r gen_data, echo=F, eval=F}
-generateDataSet <- function(startDate, endDate) {
-  eachDay <- genDaysFromRange(startDate, endDate)
-  showDaysTable(eachDay)
-  daysStats(eachDay)
-  
-  dataSet <- expandRows(eachDay)
-  
-  dataSet <- setQualOfCareRating(dataSet)
-  qualOfCareStats(dataSet)
-  
-  dataSet <- relateQualOfCareToNumPatients(dataSet)
-  
-  
-  dataSet <- addEmployeeID(dataSet)
-  employeeHist(dataSet)
-  
-
-  
+```{r convert_qual, echo=FALSE}
+convertQual <- function(dataSet) {
   # Convert Quality of Care to "Poor", "Fair", etc.
   dataSet$qualOfCare <- cut(as.numeric(dataSet$qualOfCare), 4, c("Poor",
                                                                  "Fair",
                                                                  "Good",
                                                                  "Excellent"))
-  
-  # TODO: Add related survey question responses
-  
+  dataSet
+}
+```
+
+```{r filter_cols, echo=FALSE}
+filterCols <- function(dataSet) {
   # Return the dataSet without typeOfDay
   data.frame(subset(dataSet, select=(c("date",
                                        "employeeID",
                                        "qualOfCare",
                                        "patientWorkload",
-                                       "numDailyStaffedNurses")))
-  )
+                                       "numDailyStaffedNurses"))))
 }
 ```
 
-Then we run the function to produce the results.
+# Results
 
-```{r run_generate_data, echo=F, eval=F, results='asis'}
-dataSet <- generateDataSet(startDate="1998/03/08", endDate="2007/12/01")
+By creating the `eachDay` data frame, we have a list of days and the number of
+nurses that worked every day. The *numNurses* working each day is generated from
+a random normal distribution that is different for weekday and weekend days.
+The effects of that difference can be seen in Table 1, which shows that only 7
+nurses worked the first Sunday, compared to a typical 9-12 nurses during the
+weekdays.
+
+```{r, echo=FALSE}
+eachDay <- genDaysFromRange(startDate, endDate)
+```
+```{r print_days_table, echo=FALSE, eval=TRUE}
+# Output the head of the eachDay table
+# Source 'knitr' to use kable function later for pretty tables
+options(warn=-1); suppressMessages(library(knitr)); options(warn=0)
+kable(head(eachDay),
+      row.names=F,
+      caption="Head of `eachDay` data.frame from genDaysFromRange()")
+```
+
+This difference can be seen across the entire dataset in Table 2.
+
+```{r days_stats, echo=FALSE, comment=NA}
+# Print some stats about the dates data
+e <- data.frame(c(round(mean(eachDay$numNurses), digits=2),
+                  round(mean(eachDay$numNurses[eachDay$typeOfDay == 'weekday'], digits=2)),
+                  round(mean(eachDay$numNurses[eachDay$typeOfDay == 'weekend'], digits=2)),
+                  round(min(eachDay$numNurses[eachDay$typeOfDay == 'weekday']), digits=0),
+                  round(min(eachDay$numNurses[eachDay$typeOfDay == 'weekend']), digits=0),
+                  round(max(eachDay$numNurses[eachDay$typeOfDay == 'weekday']), digits=0),
+                  round(max(eachDay$numNurses[eachDay$typeOfDay == 'weekend']), digits=0)),
+                row.names=c("Mean number of nurses",
+                            "Mean number of nurses (weekday)",
+                            "Mean number of nurses (weekend)",
+                            "Min number of nurses (weekday)",
+                            "Min number of nurses (weekend)",
+                            "Max number of nurses (weekday)",
+                            "Max number of nurses (weekend)"))
+names(e) <- c("Value")
+kable(e, caption="Means, Min. and Max. Values from `eachDay`")
+```
+
+```{r echo=FALSE}
+dataSet <- expandRows(eachDay)
+dataSet <- setQualOfCareRating(dataSet)
+```
+```{r qual_of_care_stats, echo=FALSE}
+# Output quality of care stats
+for (w in c('weekday', 'weekend')) {
+  print(sprintf("Mean quality of care during %s: %.2f",
+                w,
+                mean(dataSet$qualOfCare[dataSet$typeOfDay == w])))
+  print(sprintf("SD for quality of care during %s: %.2f",
+                w,
+                sd(dataSet$qualOfCare[dataSet$typeOfDay == w])))
+}
+```
+```{r qual_of_care_hist1, echo=FALSE, fig.width=3.5, fig.height=3}
+for (w in c('weekday', 'weekend')) {
+  simpleCap <- function(x) {
+    s <- strsplit(x, " ")[[1]]
+    paste(toupper(substring(s, 1, 1)), substring(s, 2), sep = "",
+          collapse = " ")
+    }
+  hist_title <- paste(simpleCap(w), "Quality of Care",
+                      collapse=" ")
+  hist(dataSet$qualOfCare[dataSet$typeOfDay == w],
+       main=hist_title,
+       xlab="Quality of Care Rating")
+}
+```
+```{r, echo=FALSE}
+dataSet <- relateQualOfCareToNumPatients(dataSet)
+dataSet <- addEmployeeID(dataSet)
+```
+```{r employee_id_hist, echo=FALSE, fig.width=3.5, fig.height=3}
+# Output histogram of working employees
+hist(as.integer(dataSet$employeeID[dataSet$typeOfDay == 'weekday']),
+     main='Weekday Employees',
+     xlab='Employee ID')
+hist(as.integer(dataSet$employeeID[dataSet$typeOfDay == 'weekend']),
+     main='Weekend Employees',
+     xlab='Employee ID')
+```
+```{r, echo=FALSE}
+dataSet <- convertQual(dataSet)
+dataSet <- filterCols(dataSet)
+```
+```{r dataset_stats, echo=FALSE}
+# Output the head of the dataSet
+kable(head(dataSet),
+      row.names=F,
+      caption="Head of final dataSet")
 ```
 
 # References
 
 Sochalski, J. (2004). Is more better?: the relationship between nurse staffing
 and the quality of nursing care in hospitals. Medical care, 42(2), II-67.
+
+
+```{r filter_cols, eval=FALSE}
