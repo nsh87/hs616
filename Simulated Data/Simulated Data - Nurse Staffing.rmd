@@ -70,7 +70,7 @@ are:
   'Fair', etc.
 * `filterCols`: remove the tempoary columns that were use during data generation
 
-With these sub-functions, we can then define a single function to generate and
+With these sub-functions, we can define a single function to generate and
 return the data set:
 
 ```{r gen_data, eval=FALSE}
@@ -87,13 +87,11 @@ generateDataSet <- function(startDate, endDate) {
 }
 ```
 
-Then run the function:
+Then run the function with:
 
 ```{r run_generate_data, eval=FALSE}
 dataSet <- generateDataSet(startDate="1998/03/08", endDate="2007/12/01")
 ```
-
-The full code can be seen in Appendix A.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(cache=2)
@@ -232,7 +230,6 @@ relateQualOfCareToNumPatients <- function(dataSet) {
     # on a given day a nurse could get overloaded by caring for more patients,
     # but the likelihood of getting overloaded by N patients decreases as N
     # increases.
-    # Visualize: http://www.umass.edu/wsp/resources/poisson/
     }
   
   dataSet$patientWorkload <- NA
@@ -317,6 +314,42 @@ filterCols <- function(dataSet) {
 }
 ```
 
+Of particular note is the linear relationship between Quality of Care and
+Patient Workload, created by `relateQualOfCareToNumPatients`. This relationship
+is built after `setQualOfCareRating` is run. We could have instead first
+produced the number of patients the hospital intakes each day and have different
+probabilities of intake during weekday and weekend days; following this, Quality
+of Care ratings that depend on *numNurses* and and patient intake could have
+been produced. However, since we know a linear relationship will be created
+between Quality of Care and patient workload, it was chosen to produce Quality
+of Care first and then create patient workload from that. This approach makes it
+easier to simulate the results of the 1999 survey better. Because the total
+number of "Poor", "Fair", "Good", and "Excellent" ratings from the survey is
+known, we could use those numbers to create probabilities when simulating
+Quality of Care to better represent the survey results. Below is the code to
+generate the linear relationship between Quality of Care and Patient Workload.
+
+```{r relate_qual_of_care, echo=TRUE, eval=FALSE}
+```
+
+You can see that a bias of 9 is introduced to increase the Patient Workload
+to a range between 0 and 20, which reflects the true survey results. You will
+also see that variability in the linear relationship (i.e. noise) is introduced
+using a Poisson distribution, seen below, to arbitrarily increase the Patient
+Workload. The idea behind introducing variability in this way is that a hospital
+might plan to have a specific number of nursing staff available to cover an
+estimated intake of patients, but there is a probability that the number of
+patients might surge. It might also decrease, but in this simulation we have
+a baseline number of patients plus a varying likelood of Patient Workload surge.
+
+```{r poisson, echo=FALSE, fig.width=5, fig.height=4, fig.align='center'}
+pd = dpois(0:12, 2)
+barplot(pd, names=0:12, xlab="Increase in Patient Workload",
+        ylab="Probability Function", main="Poisson Distribution (lambda=2)")
+```
+
+The full codeused to generate the dataset code can be seen in Appendix A.
+
 # Results
 
 By creating the `eachDay` data frame, we have a list of days and the number of
@@ -338,13 +371,14 @@ kable(head(eachDay),
       caption="Head of `eachDay` data.frame from genDaysFromRange()")
 ```
 
-This difference can be seen across the entire dataset in Table 2.
+This difference in staffing during weekday and weekend days seen here is
+reflected across the entire dataset, as shown in Table 2.
 
 ```{r days_stats, echo=FALSE, comment=NA}
 # Print some stats about the dates data
 e <- data.frame(c(round(mean(eachDay$numNurses), digits=2),
-                  round(mean(eachDay$numNurses[eachDay$typeOfDay == 'weekday'], digits=2)),
-                  round(mean(eachDay$numNurses[eachDay$typeOfDay == 'weekend'], digits=2)),
+                  round(mean(eachDay$numNurses[eachDay$typeOfDay == 'weekday']), digits=2),
+                  round(mean(eachDay$numNurses[eachDay$typeOfDay == 'weekend']), digits=2),
                   round(min(eachDay$numNurses[eachDay$typeOfDay == 'weekday']), digits=0),
                   round(min(eachDay$numNurses[eachDay$typeOfDay == 'weekend']), digits=0),
                   round(max(eachDay$numNurses[eachDay$typeOfDay == 'weekday']), digits=0),
@@ -364,17 +398,14 @@ kable(e, caption="Means, Min. and Max. Values from `eachDay`")
 dataSet <- expandRows(eachDay)
 dataSet <- setQualOfCareRating(dataSet)
 ```
-```{r qual_of_care_stats, echo=FALSE}
-# Output quality of care stats
-for (w in c('weekday', 'weekend')) {
-  print(sprintf("Mean quality of care during %s: %.2f",
-                w,
-                mean(dataSet$qualOfCare[dataSet$typeOfDay == w])))
-  print(sprintf("SD for quality of care during %s: %.2f",
-                w,
-                sd(dataSet$qualOfCare[dataSet$typeOfDay == w])))
-}
-```
+
+Next, we look at the Quality of Care data produced. Below we see that Quality of
+Care ratings during the weekday are far more likely to be 3 ("Good") or better.
+In contrast, during the weekend quality of care is rarely 4 ("Excellent") and is
+typically 1 ("Poor"). This is consistent with the weekday and weekend
+probabilities used to generate Quality of Care data.
+<html>&nbsp;</html>
+
 ```{r qual_of_care_hist1, echo=FALSE, fig.width=3.5, fig.height=3}
 for (w in c('weekday', 'weekend')) {
   simpleCap <- function(x) {
@@ -389,10 +420,53 @@ for (w in c('weekday', 'weekend')) {
        xlab="Quality of Care Rating")
 }
 ```
+
+We also can see the differences between weekday and weekend Quality of Care in
+Table 3 below.
+
+```{r qual_of_care_stats, echo=FALSE}
+# Output quality of care stats
+f <- data.frame(c(round(mean(dataSet$qualOfCare[dataSet$typeOfDay == 'weekday']), digits=2),
+                  round(mean(dataSet$qualOfCare[dataSet$typeOfDay == 'weekend']), digits=2),
+                  round(sd(dataSet$qualOfCare[dataSet$typeOfDay == 'weekday']), digits=2),
+                  round(sd(dataSet$qualOfCare[dataSet$typeOfDay == 'weekend']), digits=2)),
+                row.names=c("Mean quality of care (weekday)",
+                            "Mean quality of care (weekend)",
+                            "STD of quality of care (weekday)",
+                            "STD of quality of care (weekend)"))
+names(f) <- c("Value")
+kable(f, caption="Quality of Care Ratings During Weekdays and Weekends")
+```
+
+Patient workload was created through a linear relationship with Quality of Care
+ratings. That linear relationship can be observed in the plot below.
+
 ```{r, echo=FALSE}
 dataSet <- relateQualOfCareToNumPatients(dataSet)
 dataSet <- addEmployeeID(dataSet)
 ```
+```{r, echo=FALSE}
+dataSet <- convertQual(dataSet)
+dataSet <- filterCols(dataSet)
+```
+```{r linrelate_plot, echo=FALSE, fig.width=6.5, fig.height=4.5, fig.align='center'}
+boxplot(dataSet$patientWorkload ~ dataSet$qualOfCare,
+        main="Patient Workload vs. Quality of Care",
+        xlab="Quality of Care",
+        ylab="Patient Workload")
+```
+
+We see that as patient workload increases the Quality of Care rating decreases.
+What this graph cannot tell you, however, is that patient workload is very high
+during the weekends. This is a key component of the data simulation that should
+be recovered during the analysis phase.
+
+For added realism, certain nurses are more likely to be weekend workers than
+others. The histogram below shows the Employee IDs (numeric values between 0 and
+9000) separated by type of day and binned. Employees with IDs between
+approximately 4000 and 6000 appear to not work weekends, and certain other
+employees work weekend more frequently than weekdays.
+
 ```{r employee_id_hist, echo=FALSE, fig.width=3.5, fig.height=3}
 # Output histogram of working employees
 hist(as.integer(dataSet$employeeID[dataSet$typeOfDay == 'weekday']),
@@ -402,13 +476,12 @@ hist(as.integer(dataSet$employeeID[dataSet$typeOfDay == 'weekend']),
      main='Weekend Employees',
      xlab='Employee ID')
 ```
-```{r, echo=FALSE}
-dataSet <- convertQual(dataSet)
-dataSet <- filterCols(dataSet)
-```
+
+Finally, we can see the first several rows of the resulting data set in Table 4.
+
 ```{r dataset_stats, echo=FALSE}
 # Output the head of the dataSet
-kable(head(dataSet),
+kable(dataSet[0:20,,],
       row.names=F,
       caption="Head of final dataSet")
 ```
@@ -418,5 +491,25 @@ kable(head(dataSet),
 Sochalski, J. (2004). Is more better?: the relationship between nurse staffing
 and the quality of nursing care in hospitals. Medical care, 42(2), II-67.
 
+# Appendix A
 
+```{r set_constraints, eval=FALSE}
+```
+```{r gen_days, eval=FALSE}
+```
+```{r expand_days, eval=FALSE}
+```
+```{r qual_of_care, eval=FALSE}
+```
+```{r relate_qual_of_care, eval=FALSE}
+```
+```{r employee_id, eval=FALSE}
+```
+```{r convert_qual, eval=FALSE}
+```
 ```{r filter_cols, eval=FALSE}
+```
+```{r gen_data, eval=FALSE}
+```
+```{r run_generate_data, eval=FALSE}
+```
