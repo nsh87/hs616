@@ -486,6 +486,57 @@ kable(dataSet[0:20,,],
       caption="Head of final dataSet")
 ```
 
+# Analysis
+
+In particular, we would like to recover the linear relationship betwen Quality
+of Care and Patient Workload. This can easily be achieved using the `lm`
+function, which fits linear models. We first need to convert Quality of Care
+to numeric values, then fit a model using `dataSet$patientWorkload` and
+`dataSet$qualOfCare`.
+
+```{r convert_to_num}
+convertQualToNum <- function(dataSet) {
+  # Convert qualOfCare to numeric
+  dataSet$qualOfCareNum <- NA
+  dataSet$qualOfCareNum[dataSet$qualOfCare == "Poor"] <- 1
+  dataSet$qualOfCareNum[dataSet$qualOfCare == "Fair"] <- 2
+  dataSet$qualOfCareNum[dataSet$qualOfCare == "Good"] <- 3
+  dataSet$qualOfCareNum[dataSet$qualOfCare == "Excellent"] <- 4
+  dataSet
+}
+dataSet <- convertQualToNum(dataSet)
+```
+```{r analyze}
+analyzeDataSet <- function(dataSet) {
+  lm(dataSet$patientWorkload ~ dataSet$qualOfCareNum)
+}
+m <- analyzeDataSet(dataSet)
+print(summary(m))
+```
+
+We get back the equation `-1.66x + 10.7`, with a probability of this . Recall
+that we biased the linear model by 9 then added noise with a Poisson
+distribution that is most dense around 1 and 2. This would make our true bias
+very close to intercept found by the fitted linear model, 10.7. The coefficient
+we chose when building the data was -1.76, and the linear model has a
+coefficient of -1.66, which is approximately 10% less.
+
+The p-value of <2e-16 is nearly 0, and therefore we can reject the null
+hypothesis, thereby concluding that there is significant correlation between
+the dataset and the linear model. In other words, there is a linear relationship
+between Quality of Care and Patient Workload.
+
+We can also plot the residuals, which shows the difference between the fitted
+values and the simulated data. Because we have ordinal data, we add jitter to
+better visualize the residuals plot.
+
+```{r residual_plot, echo=FALSE, fig.height=7, fig.width=7, fig.align='center'}
+r <- resid(m)
+plot(jitter(dataSet$qualOfCareNum, 2.2), jitter(r, 80), ylab="Residuals",
+     xlab="Quality of Care", type='p', cex=0.15,
+     main="Residuals Plot")
+```
+
 # References
 
 Sochalski, J. (2004). Is more better?: the relationship between nurse staffing
