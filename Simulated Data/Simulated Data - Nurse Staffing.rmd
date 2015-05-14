@@ -528,14 +528,23 @@ between Quality of Care and Patient Workload.
 
 We can also plot the residuals, which shows the difference between the fitted
 values and the simulated data. Because we have ordinal data, we add jitter to
-better visualize the residuals plot.
+better visualize the residual plot.
 
 ```{r residual_plot, echo=FALSE, fig.height=7, fig.width=7, fig.align='center'}
 r <- resid(m)
-plot(jitter(dataSet$qualOfCareNum, 2.2), jitter(r, 80), ylab="Residuals",
-     xlab="Quality of Care", type='p', cex=0.15,
-     main="Residuals Plot")
+plot(jitter(dataSet$patientWorkload, 2.2), jitter(r, 60), ylab="Residuals",
+     xlab="Predicted Patient Workload", type='p', cex=0.15,
+     main="Residual Plot")
+abline(0, 0)
 ```
+
+Looking at the residual plot, we can see a very linear pattern. Typically we
+would be happy seeing random points centered around the y=0 line. Instead, above
+we see a very non-random pattern of points. Remember, however, that our Quality
+of Care variable that Patient Workload is based on is ordinal data ("Poor", 
+"Fair", etc.) that was transformed into something numeric (0, 1, etc.). Because
+of this, we might consider ignoring this less-than-ideal residual plot and only
+consider the other information acquired to evaluate our model.
 
 # References
 
