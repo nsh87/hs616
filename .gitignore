@@ -4,3 +4,7 @@
 # Ignore Vim
 *.swp
 *.swo
+
+# Ignore Knitr cache folders
+**_cache/
+**_files/

@@ -58,10 +58,10 @@ generateDataSet <- function(startDate, endDate) {
     # represent each nurse's daily responses to the questions asked by the
     # survey, which we will ultimately return as the final data set.
     #
-    # |    date    |  weekday | day |  type   | numNurses |
-    # | 1998/03/08 |  Sunday  |  0  | weekend |     7     |
-    # | 1998/03/09 |  Monday  |  1  | weekday |     9     |
-    #                         etc...
+    # |    date    | dayOfWeek | typeOfDay | numNurses |
+    # | 1998/03/08 |   Sunday  |  weekend  |     7     |
+    # | 1998/03/09 |   Monday  |  weekday  |     9     |
+    #                        etc...
   
     # Create column of dates
     eachDay <- data.frame(date=seq.Date(as.Date(startDate),
@@ -237,7 +237,10 @@ generateDataSet <- function(startDate, endDate) {
   #hist(as.integer(dataSet$employeeID[dataSet$typeOfDay == 'weekend']))
   
   # Convert Quality of Care to "Poor", "Fair", etc.
-  dataSet$qualOfCare <- cut(as.numeric(dataSet$qualOfCare), 4, c("Poor", "Fair", "Good", "Excellent"))
+  dataSet$qualOfCare <- cut(as.numeric(dataSet$qualOfCare), 4, c("Poor",
+                                                                 "Fair",
+                                                                 "Good",
+                                                                 "Excellent"))
   
   # TODO: Add related survey question responses
   
@@ -250,6 +253,9 @@ generateDataSet <- function(startDate, endDate) {
   )
 }
 dataSet <- generateDataSet(startDate="1998/03/08", endDate="2007/12/01")
+
+save_path = "/Users/Nikhil/dev/usf/hs-616/hs616/Simulated Data/nursing-data.csv"
+write.csv(dataSet, file=save_path, row.names=F)
 
 analyzeDataSet <- function(dataSet) {
   # Convert qualOfCare to numeric
