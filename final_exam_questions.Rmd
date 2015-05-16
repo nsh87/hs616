@@ -27,7 +27,7 @@ You create the plot below.
 ![High Density Plot](https://raw.githubusercontent.com/nsh87/hs616/master/figs/high-density-plot.png)
 Realizing this display format does not tell you much about the data, you plot
 the same data, this time creating the new plot below.
-![Smooth Scatter Plot}(https://github.com/nsh87/hs616/blob/master/figs/smoothscatter-of-high-density-plot.png)
+![Smooth Scatter Plot](https://github.com/nsh87/hs616/blob/master/figs/smoothscatter-of-high-density-plot.png)
 What can be said about this new plot?
 
 * It is a smooth scatter, or density plot, useful when a data set displays
