@@ -21,7 +21,36 @@ for PCA from this data set?
 * 3
 * 40
 
-## Lecture 9a
+## Lecture 9b
 
+You create the plot below.
+![High Density Plot](https://raw.githubusercontent.com/nsh87/hs616/master/figs/high-density-plot.png)
+Realizing this display format does not tell you much about the data, you plot
+the same data, this time creating the new plot below.
+![Smooth Scatter Plot}(https://github.com/nsh87/hs616/blob/master/figs/smoothscatter-of-high-density-plot.png)
+What can be said about this new plot?
+
+* It is a smooth scatter, or density plot, useful when a data set displays
+overplotting
+* It is a blurred scatter, useful when a data set displays overplotting
+* It not considered a scatter or density plot at all
+* It requires a special package in R to produce
+
+## Lecture 9b
+
+The following code generates the plot below:
+```R
+g2 + geom_boxplot() + theme(axis.text.x=element_text(angle=50, size=20, vjust=0.5))
+```
+![Boxplot](https://raw.githubusercontent.com/nsh87/hs616/master/figs/boxplot.png]
+What do the box and whisker represent in the plot?
+
+* The interquartile range (the middle half of the data set), and the median of 
+the data, respectively
+* The most common values in the data set, and the median of the data,
+respectively
+* The interquartile range (the middle half of the data set), and the mean of the
+data
+* The middle 25% of the data, and the median of the data, respectively
 
 
