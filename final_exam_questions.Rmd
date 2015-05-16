@@ -92,4 +92,27 @@ K-means clustering attempts to minimize...
 * the number of points in each cluster
 * the randomness of cluster assignment
 
+Lecture 12a
+
+Linear regression attempts to minimize the sum of squares error between the
+vertical distances of points and the fitted line. What is the plot below
+showing?  
+![Sum of Squares Error Plot](https://raw.githubusercontent.com/nsh87/hs616/master/figs/sum-of-squares-error-visual.png)
+
+* How the error between the fitted line and points is measured
+* A random quadratic equation plotting against some random points
+* A poorly fit linear equation
+* None of these answers is correct
+
+Lecture 12b
+
+What is the name of a common function in R that fits linear models?
+
+* `lm()`
+* `lin()`
+* 'linfit()`
+* `fit()`
+
+Lecture 13a
+
 
