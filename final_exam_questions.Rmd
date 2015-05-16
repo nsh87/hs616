@@ -1,5 +1,5 @@
 ---
-output: html_document
+output: pdf_document
 ---
 ## Lecture 8a
 
@@ -16,7 +16,7 @@ interpretation of the plot
 A scree plot displays eigenvalues associated with components or factors and can
 help determine the number of factors that display most of the varaiability in a
 given data set. Using the scree plot below, what is the ideal number of factors
-for PCA from this data set?
+for PCA from this data set?  
 ![Scree Plot](https://raw.githubusercontent.com/nsh87/hs616/master/figs/scree-plot-example.png)
 
 * 2
@@ -26,11 +26,11 @@ for PCA from this data set?
 
 ## Lecture 9b
 
-You create the plot below.
-![High Density Plot](https://raw.githubusercontent.com/nsh87/hs616/master/figs/high-density-plot.png)
+You create the plot below.  
+![High Density Plot](https://raw.githubusercontent.com/nsh87/hs616/master/figs/high-density-plot.png)  
 Realizing this display format does not tell you much about the data, you plot
-the same data, this time creating the new plot below.
-![Smooth Scatter Plot](https://raw.githubusercontent.com/nsh87/hs616/master/figs/smoothscatter-of-high-density-plot.png)
+the same data, this time creating the new plot below.  
+![Smooth Scatter Plot](https://raw.githubusercontent.com/nsh87/hs616/master/figs/smoothscatter-of-high-density-plot.png)  
 What can be said about this new plot?
 
 * It is a smooth scatter, or density plot, useful when a data set displays
@@ -41,11 +41,11 @@ overplotting
 
 ## Lecture 9b
 
-The following code generates the plot below:
+The following code generates the plot below:  
 ```R
 g2 + geom_boxplot() + theme(axis.text.x=element_text(angle=50, size=20, vjust=0.5))
-```
-![Boxplot](https://raw.githubusercontent.com/nsh87/hs616/master/figs/boxplot.png)
+```  
+![Boxplot](https://raw.githubusercontent.com/nsh87/hs616/master/figs/boxplot.png)  
 What do the box and whisker represent in the plot?
 
 * The interquartile range (the middle half of the data set), and the median of 
