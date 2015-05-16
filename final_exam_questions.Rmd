@@ -115,4 +115,18 @@ What is the name of a common function in R that fits linear models?
 
 Lecture 13a
 
+Linear regression treats the input variables as...
 
+* numerical values
+* boolean
+* categories
+* continuous densities
+
+Lecture 13b
+
+Which function included in R can be used to perform logistic regression?
+
+* `glm()`
+* `lm()`
+* `fit()`
+* `logit()`
