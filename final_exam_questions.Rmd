@@ -73,4 +73,23 @@ app, the rest of the data will update...
 * only if the developer updates the app
 * never
 
+## Lecture 11a
+
+![Hierarchical Clustering](https://raw.githubusercontent.com/nsh87/hs616/master/figs/hierarchical-clustering.png)  
+The type of clustering shown above is called...
+
+* hierarchical clustering
+* density clustering
+* K-means clustering
+* relationship clustering
+
+## Lecture 11b
+
+K-means clustering attempts to minimize...
+
+* the within sum of squares value of each cluster
+* the between sum of squares value
+* the number of points in each cluster
+* the randomness of cluster assignment
+
 
