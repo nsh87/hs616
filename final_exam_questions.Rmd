@@ -50,7 +50,7 @@ the data, respectively
 * The most common values in the data set, and the median of the data,
 respectively
 * The interquartile range (the middle half of the data set), and the mean of the
-data
+data, respectively
 * The middle 25% of the data, and the median of the data, respectively
 
 ## Lecture 10a
