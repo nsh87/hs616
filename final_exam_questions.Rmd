@@ -78,8 +78,8 @@ app, the rest of the data will update...
 
 ## Lecture 11a
 
-![Hierarchical Clustering](https://raw.githubusercontent.com/nsh87/hs616/master/figs/hierarchical-clustering.png)  
-The type of clustering shown above is called...
+The type of clustering shown below is called...  
+![Hierarchical Clustering](https://raw.githubusercontent.com/nsh87/hs616/master/figs/hierarchical-clustering.png)
 
 * hierarchical clustering
 * density clustering
