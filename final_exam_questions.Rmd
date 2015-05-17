@@ -33,7 +33,7 @@ the same data, this time creating the new plot below.
 ![Smooth Scatter Plot](https://raw.githubusercontent.com/nsh87/hs616/master/figs/smoothscatter-of-high-density-plot.png)  
 What can be said about this new plot?
 
-* It is a smooth scatter, or density plot, useful when a data set displays
+* It is a smooth scatter (or density) plot, useful when a data set displays
 overplotting
 * It is a blurred scatter, useful when a data set displays overplotting
 * It not considered a scatter or density plot at all
