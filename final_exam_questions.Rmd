@@ -14,9 +14,9 @@ interpretation of the plot
 ## Lecture 8b
 
 A scree plot displays eigenvalues associated with components or factors and can
-help determine the number of factors that display most of the varaiability in a
-given data set. Using the scree plot below, what is the ideal number of factors
-for PCA from this data set?  
+help determine the number of components that display most of the varaiability in
+a given data set. Using the scree plot below, what is the ideal number of 
+components for PCA from this data set?  
 ![Scree Plot](https://raw.githubusercontent.com/nsh87/hs616/master/figs/scree-plot-example.png)
 
 * 2
