@@ -136,8 +136,8 @@ Which function included in R can be used to perform logistic regression?
 
 ## Lecture 14a
 
-![ROC](https://raw.githubusercontent.com/nsh87/hs616/master/figs/auc.png)  
-ROC curves, such as the one shown above, are a common tool used to...  
+ROC curves, such as the one shown below, are a common tool used to...  
+![ROC](https://raw.githubusercontent.com/nsh87/hs616/master/figs/auc.png)
 
 * evaluate the performance of machine learning models
 * evaluate the fit of a linear model
