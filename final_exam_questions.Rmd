@@ -1,3 +1,6 @@
+---
+output: pdf_document
+---
 ## Lecture 8a
 
 What should you be aware of when using the rainbow colormap with plots?
@@ -21,7 +24,7 @@ for PCA from this data set?
 * 3
 * 40
 
-## Lecture 9b
+## Lecture 9a
 
 You create the plot below.  
 ![High Density Plot](https://raw.githubusercontent.com/nsh87/hs616/master/figs/high-density-plot.png)  
@@ -92,7 +95,7 @@ K-means clustering attempts to minimize...
 * the number of points in each cluster
 * the randomness of cluster assignment
 
-Lecture 12a
+## Lecture 12a
 
 Linear regression attempts to minimize the sum of squares error between the
 vertical distances of points and the fitted line. What is the plot below
@@ -104,7 +107,7 @@ showing?
 * A poorly fit linear equation
 * None of these answers is correct
 
-Lecture 12b
+## Lecture 12b
 
 What is the name of a common function in R that fits linear models?
 
@@ -113,7 +116,7 @@ What is the name of a common function in R that fits linear models?
 * 'linfit()`
 * `fit()`
 
-Lecture 13a
+## Lecture 13a
 
 Linear regression treats the input variables as...
 
@@ -122,7 +125,7 @@ Linear regression treats the input variables as...
 * categories
 * continuous densities
 
-Lecture 13b
+## Lecture 13b
 
 Which function included in R can be used to perform logistic regression?
 
@@ -131,7 +134,7 @@ Which function included in R can be used to perform logistic regression?
 * `fit()`
 * `logit()`
 
-Lecture 14a
+## Lecture 14a
 
 ![ROC](https://raw.githubusercontent.com/nsh87/hs616/master/figs/auc.png)  
 ROC curves, such as the one shown above, are a common tool used to...  
@@ -141,7 +144,7 @@ ROC curves, such as the one shown above, are a common tool used to...
 * plot points of a data set against predictions
 * strike fear into the hearts of men
 
-Lecture 14b
+## Lecture 14b
 
 What can be said about the following learning curve?
 ![Learning Curve](https://raw.githubusercontent.com/nsh87/hs616/master/figs/learning-curve.png)  
