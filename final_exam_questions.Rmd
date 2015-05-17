@@ -149,8 +149,8 @@ ROC curves, such as the one shown below, are a common tool used to...
 What can be said about the following learning curve?  
 ![Learning Curve](https://raw.githubusercontent.com/nsh87/hs616/master/figs/learning-curve.png)  
 
-* Adding additional points to the training data _will not_ help improve the model
-* Adding additional points to the training data _will_ help improve the model
+* Adding additional samples to the training data _will not_ help improve the model
+* Adding additional samples to the training data _will_ help improve the model
 * The model is over-fitted
 * The model is under-fitted
 
