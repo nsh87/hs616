@@ -113,7 +113,7 @@ What is the name of a common function in R that fits linear models?
 
 * `lm()`
 * `lin()`
-* 'linfit()`
+* `linfit()`
 * `fit()`
 
 ## Lecture 13a
