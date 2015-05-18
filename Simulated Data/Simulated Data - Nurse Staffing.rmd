@@ -521,10 +521,12 @@ very close to intercept found by the fitted linear model, 10.7. The coefficient
 we chose when building the data was -1.76, and the linear model has a
 coefficient of -1.66, which is approximately 10% less.
 
-The p-value of <2e-16 is nearly 0, and therefore we can reject the null
-hypothesis, thereby concluding that there is significant correlation between
-the dataset and the linear model. In other words, there is a linear relationship
-between Quality of Care and Patient Workload.
+The p-value of <2e-16 is nearly 0, therefore we can conclude that there is
+significance to the coefficient being non-zero. In other words, there appears to
+be a linear relationship between Quality of Care and Patient Workload, although
+the fit of that line to the data should always be verified with a plot since
+a linear model can be (incorrectly) fitted to data following a quadratic curve
+to yield a coefficient.
 
 We can also plot the residuals, which shows the difference between the fitted
 values and the simulated data. Because we have ordinal data, we add jitter to
