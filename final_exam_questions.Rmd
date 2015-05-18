@@ -103,7 +103,7 @@ showing?
 ![Sum of Squares Error Plot](https://raw.githubusercontent.com/nsh87/hs616/master/figs/sum-of-squares-error-visual.png)
 
 * How the error between the fitted line and points is measured
-* A random quadratic equation plotted against some random points
+* A random quadratic equation plotted with some random points
 * A poorly fit linear equation
 * None of these answers is correct
 
