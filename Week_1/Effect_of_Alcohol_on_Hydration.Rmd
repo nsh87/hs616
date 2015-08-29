@@ -14,21 +14,67 @@ print_as_latex <- function(r_equation){
 ```
 
 # Introduction
-The consumption of alcohol results in an increase in the amount of urine produced by the individual. This increases arises because alcohol inhibits the body's mechanism for regulating urine production. Normally, an individual's pituitary gland will increase the production of anti-diueretic hormone (ADH) when (s)he is dehydrated in order to slow the creation of urine, but alcohol reduces ADH production, causing one's body to create more urine than it normally would. Consuming one serving of alcohol results in approximately 120mL of excess urine. Using back of the envelope forumlas, we can approximate the effects of alcohol consumption on the level of hydration of individuals with varying weights.
+The consumption of alcohol results in an increase in the amount of urine
+produced by the individual. This increases arises because alcohol
+inhibits the body's mechanism for regulating urine production. Normally,
+an individual's pituitary gland will increase the production of
+anti-diueretic hormone (ADH) when (s)he is dehydrated in order to slow
+the creation of urine, but alcohol reduces ADH production, causing one's
+body to create more urine than it normally would. Consuming one serving
+of alcohol results in approximately 120mL of excess urine. Using back of
+the envelope forumlas, we can approximate the effects of alcohol
+consumption on the level of hydration of individuals with varying
+weights.
 
 # Background
-A man or woman who weighs "X"kg will urinate approximately "X"mL of urine per hour under average conditions but can urinate several times that amount depending on factors like heat and level of activity. Let's consider a 60kg man (132lbs) under normal conditions who therefore urinates 60mL per hour, or 1440mL per day. This man should consume at least 1440mL (equal to 6 cups) of water per day in order to retain a safe amount of water. This offers a baseline understanding of the logic we will apply here, and hopefully some insight into where recommendations for water consumption come from. Because an increase in activity is typical during alcohol consumption, let's add an additional 20mL of water loss per hour while drinking, due to perspiration and increased breathing rate. Now let's throw alcohol into the mix.
+A man or woman who weighs "X"kg will urinate approximately "X"mL of urine
+per hour under average conditions but can urinate several times that
+amount depending on factors like heat and level of activity. Let's
+consider a 60kg man (132lbs) under normal conditions who therefore
+urinates 60mL per hour, or 1440mL per day. This man should consume at
+least 1440mL (equal to 6 cups) of water per day in order to retain a safe
+amount of water. This offers a baseline understanding of the logic we
+will apply here, and hopefully some insight into where recommendations
+for water consumption come from. Because an increase in activity is
+typical during alcohol consumption, let's add an additional 20mL of water
+loss per hour while drinking, due to perspiration and increased breathing
+rate. Now let's throw alcohol into the mix.
 
-Th consumption of beer with an alcohol content $\leq$ 4% does not usually result in significant dehydration. This is because although one can of beer (about 355mL of liquid) consumed over one hour will generate 120mL of urine above normal, the drinker intakes about 340mL of water from the beer. In one hour, the same man would intake a net 140mL of water. 
+Th consumption of beer with an alcohol content $\leq$ 4% does not usually
+result in significant dehydration. This is because although one can of
+beer (about 355mL of liquid) consumed over one hour will generate 120mL
+of urine above normal, the drinker intakes about 340mL of water from the
+beer. In one hour, the same man would intake a net 140mL of water. 
 ```{r equation1, echo=FALSE, results='asis'}
 print_as_latex("-60mL -120mL -20mL + 340mL = 140mL")
 ```
-If he is already hydrated, he will most likely urinate in excess of normal, but this will not contribute to his dehydration. However, other drinks such as wine and liquors with a much smaller water content than beer will cause the drinker to dehydrate quickly. The same amount of excess urine will be created (120mL per drink from alcohol), but the water intake will be significantly less than with beer.
+If he is already hydrated, he will most likely urinate in excess of
+normal, but this will not contribute to his dehydration. However, other
+drinks such as wine and liquors with a much smaller water content than
+beer will cause the drinker to dehydrate quickly. The same amount of
+excess urine will be created (120mL per drink from alcohol), but the
+water intake will be significantly less than with beer.
 
-A final consideration here is the impact of the dehydration on health. Average water mass is about 60% of body weight. So the individual described above has about 36kg of water in his body, or 36000mL. If he were to lose 1500mL of water, his level of hydration would reduce to 58.6% (34kg $\div$ 58kg = .586). As little as 2% loss in hydration is enough for the brain's function to diminish, the mind to lose alertness, and for the body to fatigue. 6-10% dehydration is considered cause for immediate concern, and anything beyond that is severe and requires hospitalization and an IV. If the man above wants to rehydrate back to normal, he will have to consume approximately 3000-4500mL (12-19 cups) of water because only $\frac{1}{3}$ to $\frac{1}{2}$ of water consumed will be retained. The rest well be released as urine. For this analysis we will assume that 40% of water consumed to rehydrate is retained. 
+A final consideration here is the impact of the dehydration on health.
+Average water mass is about 60% of body weight. So the individual
+described above has about 36kg of water in his body, or 36000mL. If he
+were to lose 1500mL of water, his level of hydration would reduce to
+58.6% (34kg $\div$ 58kg = .586). As little as 2% loss in hydration is
+enough for the brain's function to diminish, the mind to lose alertness,
+and for the body to fatigue. 6-10% dehydration is considered cause for
+immediate concern, and anything beyond that is severe and requires
+hospitalization and an IV. If the man above wants to rehydrate back to
+normal, he will have to consume approximately 3000-4500mL (12-19 cups) of
+water because only $\frac{1}{3}$ to $\frac{1}{2}$ of water consumed will
+be retained. The rest well be released as urine. For this analysis we
+will assume that 40% of water consumed to rehydrate is retained. 
 
 # Method & Computation
-We will consider here the consumption of shots of alcohol, whose water content are so minimal that we will consider the drinker to not intake any water with each drink. We can then generate a matrix representing the total water loss for individuals of varying weights who consume varying numbers of drinks over a period of three hours.
+We will consider here the consumption of shots of alcohol, whose water
+content are so minimal that we will consider the drinker to not intake
+any water with each drink. We can then generate a matrix representing the
+total water loss for individuals of varying weights who consume varying
+numbers of drinks over a period of three hours.
 
 ```{r loss_function, echo=TRUE}
 weights <- seq(50, 90, 5)  # Weights from 50-90kg in 5kg increments
@@ -47,22 +93,36 @@ names(loss_matrix) <- weights
 ```{r show_table, echo=FALSE}
 print(loss_matrix)
 ```
-We then generate similar matrix representations of the final weight of water in the individuals after the water loss due to drinking, and compare that with their new weight after the water loss to calculate their level of dehydration. [We will consider dehydration to be the deviation from the initial standard 60% of body weight is water assumption.] The intermediate steps here are to create matrices representing: 1) the initial amount of water in the individuals and 2) the final amount of water in the individuals, for all drinks and weights.
+We then generate similar matrix representations of the final weight of
+water in the individuals after the water loss due to drinking, and
+compare that with their new weight after the water loss to calculate
+their level of dehydration. [We will consider dehydration to be the
+deviation from the initial standard 60% of body weight is water
+assumption.] The intermediate steps here are to create matrices
+representing: 1) the initial amount of water in the individuals and 2)
+the final amount of water in the individuals, for all drinks and weights.
 
 ```{r get_water_weight_final_function, echo=TRUE}
 water_weight_initial <- function (weights, drinks) {
-  # Need no. of drinks to repeat the data cross the same no. of rows as there are drinks
+  # Need no. of drinks to repeat the data cross the same no. of rows as
+  #  there are drinks
   watr <- rep.int(rbind(weights * 0.6), length(drinks))
   dim(watr) <- c(length(weights), length(drinks))  # Make the dimensions 9 x 12
-  watr <- t(watr)  # Transpose to make dimension 12 x 9 (rows=drinks, cols=weights)
+  watr <- t(watr)  # Transpose to make dimension 12 x 9 (rows=drinks, 
+                   # cols=weights)
   return(watr)
 }
 wci <- water_weight_initial(weights, drinks)  # (Intermdiate Step #1)
-loss_kg <- loss_matrix / 1000  # wci is in kg, so convert loss_matrix from mL to kg
+loss_kg <- loss_matrix / 1000  # wci is in kg, so convert loss_matrix from mL 
+                               # to kg
 water_weight_final <- wci - loss_kg  # (Intermediate Step #2) Output below
 ```
 
-We now have the critical `water_weight_final`, which represents the weight in kg of water present in each individual after the water loss due. Next, we calculate the final weights of the individuals after the water loss, in kg, which is simply their initial weight subtracted by the weight of water loss in kg.
+We now have the critical `water_weight_final`, which represents the
+weight in kg of water present in each individual after the water loss
+due. Next, we calculate the final weights of the individuals after the
+water loss, in kg, which is simply their initial weight subtracted by the
+weight of water loss in kg.
 ```{r calculate_final_weight, echo=TRUE}
 initial_weights <- function (weights, drinks) {
   wpi <- rep.int(rbind(weights), length(drinks))
@@ -71,9 +131,12 @@ initial_weights <- function (weights, drinks) {
   return(wpi)
 }
 initial_weights_matrix <- initial_weights(weights, drinks)
-final_weights_matrix <- initial_weights_matrix - loss_kg # Matrix of final weights
+final_weights_matrix <- initial_weights_matrix - loss_kg # Matrix of final
+                                                         # weights
 ```
-Finally, we calculate the level of hydration after the water loss, which is simply the percentage of body mass that is water, compare that to the initial hydration of 60%, and visualize the data.
+Finally, we calculate the level of hydration after the water loss, which
+is simply the percentage of body mass that is water, compare that to the
+initial hydration of 60%, and visualize the data.
 ```{r plot_dehydration, echo=TRUE, eval=FALSE}
 # We now have requisite info to calculate level of hydration
 hydration_level <- water_weight_final / final_weights_matrix  # (e.g. 0.597, 0.596)
